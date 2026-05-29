@@ -42,7 +42,16 @@ Output goes to `dist/` folder.
 3. Connect GitHub repo
 4. Set build command: `npm run build`
 5. Set output directory: `dist`
-6. Deploy ✅
+6. **Add environment variable** `GEMINI_API_KEY` (Settings → Environment variables → Production & Preview). Required for chat & AI fallback search — the key is read by [`functions/api/chat.js`](functions/api/chat.js) and never exposed to the browser. Get a key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
+7. Deploy ✅
+
+### Local development with the API proxy
+
+`npm run dev` serves the React app only — `/api/chat` will 404. To exercise the proxy locally, run Pages + Functions together:
+
+```bash
+GEMINI_API_KEY=... npx wrangler pages dev -- npm run dev
+```
 
 ---
 
@@ -65,9 +74,9 @@ adhikar-setu/
 ## 🎨 Tech Stack
 
 - React 18
-- Vite 4
-- Claude AI API (Anthropic)
-- Cloudflare Pages
+- Vite 6
+- Gemini 2.5 Flash (with Google Search grounding)
+- Cloudflare Pages + Pages Functions
 
 ---
 

@@ -180,8 +180,9 @@ SCHEMES_JSON_END
 Then 2-line warm summary. Reply in user's language if not English.`
     const msgs = history.map(m=>({role:m.role==="user"?"user":"assistant",content:m.role==="bot"?(m.rawText||m.text):m.text}))
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,tools:[{type:"web_search_20250305",name:"web_search"}],messages:msgs})})
+      const res = await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,messages:msgs})})
       const data = await res.json()
+      if (!res.ok || !data?.content) throw new Error(data?.error?.message || data?.error || "Chat request failed")
       let full = data.content.filter(b=>b.type==="text").map(b=>b.text).join("")
       let schemes=null
       const jm = full.match(/SCHEMES_JSON_START\s*([\s\S]*?)\s*SCHEMES_JSON_END/)
@@ -269,8 +270,9 @@ function FormPage({ setPage, setSelectedScheme, formResult, setFormResult, formP
 Return ONLY raw JSON array 6-8 schemes (no markdown):
 [{"id":"slug","name":"","ministry":"","type":"Central/State","tag":"Housing/Health/Education/Agriculture/Loan/Finance/Women/Employment/Social Welfare","benefit":"","eligibility":"","documents":[],"how_to_apply":"","link":""}]`
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:prompt}]})})
+      const res = await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:prompt}]})})
       const data = await res.json()
+      if (!res.ok || !data?.content) throw new Error(data?.error?.message || data?.error || "Chat request failed")
       const text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("")
       const clean = text.replace(/```json|```/g,"").trim()
       const s=clean.indexOf("["),e=clean.lastIndexOf("]")+1
