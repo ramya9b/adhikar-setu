@@ -440,20 +440,35 @@ function ChatPage({ T,lang }){
     setInput(""); setLoading(true);
     trackEvent("chat_message");
     try{
+      const apiKey=import.meta.env.VITE_GEMINI_API_KEY||"";
+      if(!apiKey){
+        setMessages(m=>[...m,{role:"model",content:"Chat is not configured yet. Please use the Form tab to find schemes by filling your profile — it works without any API key."}]);
+        setLoading(false); return;
+      }
       const history=[...messages,userMsg].map(m=>({role:m.role==="assistant"?"model":m.role,parts:[{text:m.content}]}));
-      const res=await fetch(`${GEMINI_URL}?key=${import.meta.env.VITE_GEMINI_API_KEY||""}`,{
+      const res=await fetch(`${GEMINI_URL}?key=${apiKey}`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
-          system_instruction:{parts:[{text:`You are Adhikar Setu, an expert on Indian government schemes. Help users find Central and State schemes they qualify for. Be concise, accurate and empathetic. Always mention official URLs. Respond in the user's language (English, Hindi, Telugu or Kannada). Cover PM-JAY, PM Kisan, PMEGP, Mudra and 58+ verified schemes across 15 Indian states.`}]},
+          system_instruction:{parts:[{text:"You are Adhikar Setu, an expert on Indian government schemes. Help users find Central and State schemes they qualify for. Be concise, accurate and empathetic. Always mention official URLs. Respond in the user language (English, Hindi, Telugu or Kannada). Cover PM-JAY, PM Kisan, PMEGP, Mudra and 58+ verified schemes across 15 Indian states."}]},
           contents:history
         })
       });
       const data=await res.json();
-      const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text||"Sorry, I could not process that. Please try again.";
-      setMessages(m=>[...m,{role:"model",content:reply}]);
-    }catch{
-      setMessages(m=>[...m,{role:"model",content:"Network error. Please check your connection and try again."}]);
+      if(data.error){
+        console.error("Gemini API error:",data.error);
+        setMessages(m=>[...m,{role:"model",content:`API Error: ${data.error.message||"Unknown error"}. Please use the Form tab to find schemes instead.`}]);
+        setLoading(false); return;
+      }
+      const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if(!reply){
+        setMessages(m=>[...m,{role:"model",content:"No response received. Please try again or use the Form tab to find schemes."}]);
+      } else {
+        setMessages(m=>[...m,{role:"model",content:reply}]);
+      }
+    }catch(err){
+      console.error("Chat error:",err);
+      setMessages(m=>[...m,{role:"model",content:"Network error — please check your connection. Meanwhile, use the Form tab to find schemes without internet."}]);
     }finally{ setLoading(false); }
   };
 
