@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|google|sitemap|manifest|sw\\.js|icons/|og-image|favicon).*)",
       "destination": "/index.html"
     }
   ],
