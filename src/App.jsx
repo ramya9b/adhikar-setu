@@ -14,7 +14,7 @@ const INCOMES = [
   { value:500000,label:"₹3L – ₹5L" },{ value:1000000,label:"₹5L – ₹10L" },
   { value:1800000,label:"Above ₹10L" },
 ];
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 // ─── Theme ───────────────────────────────────────────────────
 function useTheme() {
