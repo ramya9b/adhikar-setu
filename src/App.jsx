@@ -220,25 +220,36 @@ function HomePage({ T,lang,onNav }){
 function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
   const [profile,setProfile] = useState(()=>{ try{return JSON.parse(localStorage.getItem("as_profile")||"{}");}catch{return{};} });
   const [results,setResults] = useState(null);
-  const [searching,setSearching] = useState(false);   // FIX 3: loading spinner
+  const [searching,setSearching] = useState(false);
+  const [formError,setFormError] = useState("");
   const [detail,setDetail] = useState(null);
   const [categoryFilter,setCategoryFilter] = useState("all");
   const [scopeFilter,setScopeFilter] = useState("all");
   const [search,setSearch] = useState("");
   const [downloading,setDownloading] = useState(false);
   const resultsRef = useRef(null);
-  const set=(k,v)=>setProfile(p=>({...p,[k]:v}));
+  const set=(k,v)=>{ setProfile(p=>({...p,[k]:v})); setFormError(""); };
+
+  const validate=()=>{
+    const age=parseInt(profile.age);
+    if(!profile.age && !profile.state) return "Please enter your Age and select a State to find relevant schemes.";
+    if(!profile.age) return "Please enter your Age to find matching schemes.";
+    if(isNaN(age)||age<1||age>120) return "Please enter a valid age between 1 and 120.";
+    if(age<5) return "Minimum age for most schemes is 5 years. Please check your age.";
+    return "";
+  };
 
   const handleFind=()=>{
-    setSearching(true);                                // show spinner
-    // Small timeout so spinner renders before heavy filter runs
+    const err=validate();
+    if(err){ setFormError(err); return; }
+    setFormError("");
+    setSearching(true);
     setTimeout(()=>{
       const found=filterSchemes({ age:parseInt(profile.age)||30, gender:profile.gender||"all", state:profile.state==="All India"?"":(profile.state||""), category:profile.category||"general", occupation:profile.occupation||"all", income:parseInt(profile.income)||300000, specialStatus:profile.specialStatus?[profile.specialStatus]:[] });
       setResults(found); setCategoryFilter("all"); setScopeFilter("all"); setSearch("");
       localStorage.setItem("as_profile",JSON.stringify(profile));
       trackEvent("search",{ state:profile.state,category:profile.category,results:found.length });
       setSearching(false);
-      // Scroll to results
       setTimeout(()=>resultsRef.current?.scrollIntoView({ behavior:"smooth", block:"start" }),100);
     },300);
   };
@@ -269,7 +280,7 @@ function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <div>
             <label style={labelStyle(T)}>{t(lang,"labelAge")}</label>
-            <input type="number" min={1} max={120} value={profile.age||""} onChange={e=>set("age",e.target.value)} placeholder="e.g. 35" style={{...inputStyle(T),width:"100%",boxSizing:"border-box"}}/>
+            <input type="number" min={1} max={120} value={profile.age||""} onChange={e=>set("age",e.target.value)} placeholder="e.g. 35" style={{...inputStyle(T),width:"100%",boxSizing:"border-box",borderColor:formError&&!profile.age?"#e65100":undefined}}/>
           </div>
           <div>
             <label style={labelStyle(T)}>{t(lang,"labelGender")}</label>
@@ -319,9 +330,16 @@ function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
         <button onClick={handleFind} disabled={searching} style={{...btnStyle(searching?"#aaa":FLAG.saffron,"#fff"),width:"100%",padding:"13px",fontSize:15,marginTop:16,opacity:searching?0.8:1}}>
           {searching?"🔍 Searching...":t(lang,"findBtn")}
         </button>
+        {/* FIX 3: Validation error message */}
+        {formError&&(
+          <div style={{marginTop:10,padding:"10px 14px",background:"#fff3e0",border:"1px solid #ffb74d",borderRadius:8,fontSize:13,color:"#e65100",display:"flex",alignItems:"flex-start",gap:8}}>
+            <span style={{flexShrink:0}}>⚠️</span>
+            <span>{formError}</span>
+          </div>
+        )}
       </div>
 
-      {/* FIX 3: Spinner while searching */}
+      {/* Spinner while searching */}
       {searching && <Spinner T={T}/>}
 
       {/* Results */}
@@ -477,6 +495,12 @@ function SavedPage({ T,lang,saved,onToggleSave,applied,onToggleApplied,onClear }
           {savedSchemes.length>0&&<button onClick={onClear} style={btnStyle("#e53935","#fff",true)}>{t(lang,"clearAll")}</button>}
         </div>
       </div>
+      {/* FIX 4: localStorage persistence note */}
+      {(savedSchemes.length>0||applied.length>0)&&(
+        <div style={{fontSize:11,color:T.text2,background:T.input,borderRadius:8,padding:"8px 10px",marginBottom:12,lineHeight:1.5}}>
+          💡 Saved and applied schemes are stored on this device. To keep a permanent record, download a PDF or take a screenshot.
+        </div>
+      )}
       {savedSchemes.length===0
         ?<div style={{textAlign:"center",color:T.text2,padding:"32px 0",fontSize:15}}>{t(lang,"savedEmpty")}</div>
         :savedSchemes.map(s=><SchemeCard key={s.id} scheme={s} lang={lang} T={T} saved={saved} onToggleSave={onToggleSave} applied={applied} onToggleApplied={onToggleApplied} onDetail={setDetail}/>)
@@ -489,7 +513,10 @@ function SavedPage({ T,lang,saved,onToggleSave,applied,onToggleApplied,onClear }
             <h3 style={{color:T.text,fontSize:16,fontWeight:700,margin:0}}>✅ Applied Schemes ({appliedSchemes.length})</h3>
           </div>
           <div style={{background:T.card,border:`1px solid ${FLAG.green}44`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-            <p style={{color:T.text2,fontSize:12,margin:"0 0 10px"}}>Schemes you've marked as applied. Tap ✅ on any scheme to unmark.</p>
+            <p style={{color:T.text2,fontSize:12,margin:"0 0 6px"}}>Schemes you've marked as applied. Tap ✅ on any scheme to unmark.</p>
+            <p style={{color:"#e65100",fontSize:11,margin:"0 0 10px",background:"#fff3e0",borderRadius:6,padding:"6px 8px"}}>
+              ⚠️ This data is stored on your device only. Clearing browser data or app cache will reset your applied tracking. Take a screenshot or note important applications separately.
+            </p>
             {appliedSchemes.map(s=>(
               <div key={s.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.border}`}}>
                 <div>
