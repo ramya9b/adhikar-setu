@@ -1,19 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Adhikar Setu - Find Indian government schemes you qualify for. Loans, housing, health, education, pensions and more." />
-    <meta name="keywords" content="government schemes India, PM Mudra loan, Ayushman Bharat, PMAY, scholarships, Adhikar Setu" />
-    <meta name="author" content="Sri Vara Lakshmi Balaji Enterprises" />
-    <meta property="og:title" content="Adhikar Setu — Your Right, Your Bridge" />
-    <meta property="og:description" content="AI-powered government schemes finder for every Indian citizen." />
-    <meta property="og:type" content="website" />
-    <title>Adhikar Setu — Your Right, Your Bridge</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🌉</text></svg>" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Adhikar Setu — Find Indian Government Schemes You Qualify For</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#FF9933"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Adhikar Setu"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+
+  <!-- SEO -->
+  <meta name="description" content="Find 58+ Indian government schemes you qualify for — PM-JAY, PM Kisan, Mudra, scholarships, pensions and state schemes. Free, multilingual (English/Hindi/Telugu/Kannada), works offline."/>
+  <meta name="keywords" content="government schemes India, sarkari yojana, PM-JAY, PM Kisan, Mudra loan, scholarships, pension, adhikar setu, Karnataka schemes, Telangana schemes, myscheme.gov.in"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://adhikar-setu.vercel.app"/>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Adhikar Setu — Your Rights Bridge"/>
+  <meta property="og:description" content="Find 58+ verified Indian government schemes across 15 states. Free, multilingual, works offline."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://adhikar-setu.vercel.app"/>
+  <meta property="og:image" content="https://adhikar-setu.vercel.app/icons/icon-512.png"/>
+  <meta property="og:locale" content="en_IN"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Adhikar Setu — Find Government Schemes"/>
+  <meta name="twitter:description" content="58+ verified Central + State schemes. PM-JAY, Mudra, PM Kisan and more. Free app."/>
+  <meta name="twitter:image" content="https://adhikar-setu.vercel.app/icons/icon-512.png"/>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Adhikar Setu",
+    "description": "Find Indian government schemes you qualify for — 58+ verified Central and State schemes across health, housing, agriculture, education and more.",
+    "url": "https://adhikar-setu.vercel.app",
+    "applicationCategory": "GovernmentApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "inLanguage": ["en", "hi", "te", "kn"],
+    "author": { "@type": "Organization", "name": "Sri Vara Lakshmi Balaji Enterprises", "address": { "@type": "PostalAddress", "addressLocality": "Bengaluru", "addressCountry": "IN" } }
+  }
+  </script>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{-webkit-tap-highlight-color:transparent;}
+    input,select,button,textarea{font-family:inherit;}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>
