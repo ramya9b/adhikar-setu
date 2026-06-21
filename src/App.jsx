@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { SCHEMES, filterSchemes, SCHEME_STATES, SCHEME_CATEGORIES } from "./data/schemes.js";
 import { downloadSchemesPDF } from "./utils/pdf.js";
 import { t } from "./i18n.js";
@@ -39,8 +39,11 @@ function usePWA() {
     window.addEventListener("online",on); window.addEventListener("offline",off);
     window.addEventListener("beforeinstallprompt",onPrompt);
     window.addEventListener("appinstalled",onInstalled);
-    return ()=>{ window.removeEventListener("online",on); window.removeEventListener("offline",off);
-      window.removeEventListener("beforeinstallprompt",onPrompt); window.removeEventListener("appinstalled",onInstalled); };
+    return ()=>{
+      window.removeEventListener("online",on); window.removeEventListener("offline",off);
+      window.removeEventListener("beforeinstallprompt",onPrompt);
+      window.removeEventListener("appinstalled",onInstalled);
+    };
   },[]);
   const promptInstall = async()=>{ if(!installPrompt)return; installPrompt.prompt(); const{outcome}=await installPrompt.userChoice; if(outcome==="accepted"){setInstalled(true);setInstallPrompt(null);} };
   return { isOffline,installPrompt,installed,promptInstall };
@@ -60,15 +63,17 @@ function useApplied() {
   return { applied,toggle };
 }
 
-// ─── Analytics (localStorage-based, private) ─────────────────
+// ─── Analytics ───────────────────────────────────────────────
 function trackEvent(name, data={}) {
   try {
-    const key = "as_analytics";
-    const existing = JSON.parse(localStorage.getItem(key)||"[]");
-    existing.push({ event:name, ...data, ts:Date.now() });
-    // Keep last 100 events only
-    if(existing.length>100) existing.splice(0, existing.length-100);
-    localStorage.setItem(key, JSON.stringify(existing));
+    // Plausible (if loaded)
+    if(window.plausible) window.plausible(name, { props: data });
+    // Local fallback
+    const key="as_analytics";
+    const existing=JSON.parse(localStorage.getItem(key)||"[]");
+    existing.push({ event:name,...data,ts:Date.now() });
+    if(existing.length>100) existing.splice(0,existing.length-100);
+    localStorage.setItem(key,JSON.stringify(existing));
   } catch {}
 }
 
@@ -89,23 +94,50 @@ function Badge({ text,color }){
   return <span style={{fontSize:10,fontWeight:700,padding:"2px 7px",borderRadius:10,background:color+"22",color,border:`1px solid ${color}44`,whiteSpace:"nowrap"}}>{text}</span>;
 }
 
+// ─── Back To Top Button ───────────────────────────────────────
+function BackToTop({ T }) {
+  const [visible,setVisible] = useState(false);
+  useEffect(()=>{
+    const onScroll=()=>setVisible(window.scrollY > 400);
+    window.addEventListener("scroll",onScroll,{ passive:true });
+    return ()=>window.removeEventListener("scroll",onScroll);
+  },[]);
+  if(!visible) return null;
+  return (
+    <button
+      onClick={()=>window.scrollTo({ top:0, behavior:"smooth" })}
+      style={{ position:"fixed",bottom:72,right:16,width:40,height:40,borderRadius:"50%",background:FLAG.saffron,color:"#fff",border:"none",fontSize:18,cursor:"pointer",boxShadow:"0 2px 12px rgba(0,0,0,0.2)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center" }}
+      title="Back to top"
+    >↑</button>
+  );
+}
+
+// ─── Spinner ─────────────────────────────────────────────────
+function Spinner({ T }) {
+  return (
+    <div style={{textAlign:"center",padding:"32px 0"}}>
+      <div style={{display:"inline-block",width:36,height:36,border:`3px solid ${T.border}`,borderTop:`3px solid ${FLAG.saffron}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </div>
+  );
+}
+
 function shareOnWhatsApp(scheme){
   const msg=`🌉 *Adhikar Setu*\n\n*${scheme.name}*\n💰 ${scheme.benefit}\n🔗 ${scheme.applyUrl}\n\n_Find your schemes: adhikar-setu.vercel.app_`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
 }
 
-function shareAllResults(schemes, profile){
-  const lines = schemes.slice(0,8).map((s,i)=>`${i+1}. *${s.name}*\n   💰 ${s.benefit}`).join("\n\n");
-  const msg = `🌉 *Adhikar Setu — My Eligible Schemes*\n\n${lines}\n\n_Find your schemes: adhikar-setu.vercel.app_`;
+function shareAllResults(schemes){
+  const lines=schemes.slice(0,8).map((s,i)=>`${i+1}. *${s.name}*\n   💰 ${s.benefit}`).join("\n\n");
+  const msg=`🌉 *Adhikar Setu — My Eligible Schemes*\n\n${lines}\n\n_Find your schemes: adhikar-setu.vercel.app_`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
+  trackEvent("share_all",{ count:schemes.length });
 }
 
 // ─── Scheme Card ─────────────────────────────────────────────
 function SchemeCard({ scheme,lang,T,saved,onToggleSave,applied,onToggleApplied,onDetail }){
-  const isSaved = saved.includes(scheme.id);
-  const isApplied = applied.includes(scheme.id);
-  const isState = scheme.scope==="state";
-  const accent = isState?FLAG.green:FLAG.saffron;
+  const isSaved=saved.includes(scheme.id), isApplied=applied.includes(scheme.id);
+  const isState=scheme.scope==="state", accent=isState?FLAG.green:FLAG.saffron;
   return (
     <div style={{background:T.card,border:`1px solid ${T.border}`,borderRadius:12,overflow:"hidden",marginBottom:12,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
       <div style={{borderLeft:`4px solid ${accent}`,padding:"14px 16px"}}>
@@ -114,7 +146,7 @@ function SchemeCard({ scheme,lang,T,saved,onToggleSave,applied,onToggleApplied,o
             <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:4}}>
               <Badge text={isState?`${t(lang,"scopeState")} · ${scheme.states[0]}`:t(lang,"scopeCentral")} color={accent}/>
               <Badge text={scheme.category.toUpperCase()} color={FLAG.navy}/>
-              {isApplied && <Badge text="✅ Applied" color="#2e7d32"/>}
+              {isApplied&&<Badge text="✅ Applied" color="#2e7d32"/>}
             </div>
             <div style={{fontWeight:700,fontSize:14,color:T.text,lineHeight:1.3}}>{scheme.name}</div>
             <div style={{fontSize:11,color:T.text2,marginTop:2}}>{scheme.ministry}</div>
@@ -188,18 +220,27 @@ function HomePage({ T,lang,onNav }){
 function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
   const [profile,setProfile] = useState(()=>{ try{return JSON.parse(localStorage.getItem("as_profile")||"{}");}catch{return{};} });
   const [results,setResults] = useState(null);
+  const [searching,setSearching] = useState(false);   // FIX 3: loading spinner
   const [detail,setDetail] = useState(null);
   const [categoryFilter,setCategoryFilter] = useState("all");
   const [scopeFilter,setScopeFilter] = useState("all");
   const [search,setSearch] = useState("");
   const [downloading,setDownloading] = useState(false);
+  const resultsRef = useRef(null);
   const set=(k,v)=>setProfile(p=>({...p,[k]:v}));
 
   const handleFind=()=>{
-    const found = filterSchemes({ age:parseInt(profile.age)||30, gender:profile.gender||"all", state:profile.state==="All India"?"":(profile.state||""), category:profile.category||"general", occupation:profile.occupation||"all", income:parseInt(profile.income)||300000, specialStatus:profile.specialStatus?[profile.specialStatus]:[] });
-    setResults(found); setCategoryFilter("all"); setScopeFilter("all"); setSearch("");
-    localStorage.setItem("as_profile",JSON.stringify(profile));
-    trackEvent("search",{ state:profile.state, category:profile.category, results:found.length });
+    setSearching(true);                                // show spinner
+    // Small timeout so spinner renders before heavy filter runs
+    setTimeout(()=>{
+      const found=filterSchemes({ age:parseInt(profile.age)||30, gender:profile.gender||"all", state:profile.state==="All India"?"":(profile.state||""), category:profile.category||"general", occupation:profile.occupation||"all", income:parseInt(profile.income)||300000, specialStatus:profile.specialStatus?[profile.specialStatus]:[] });
+      setResults(found); setCategoryFilter("all"); setScopeFilter("all"); setSearch("");
+      localStorage.setItem("as_profile",JSON.stringify(profile));
+      trackEvent("search",{ state:profile.state,category:profile.category,results:found.length });
+      setSearching(false);
+      // Scroll to results
+      setTimeout(()=>resultsRef.current?.scrollIntoView({ behavior:"smooth", block:"start" }),100);
+    },300);
   };
 
   const handlePDF=async()=>{
@@ -209,14 +250,11 @@ function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
     finally{ setDownloading(false); }
   };
 
-  const filteredResults = (results||[]).filter(s=>{
-    if(categoryFilter!=="all" && s.category!==categoryFilter) return false;
-    if(scopeFilter==="central" && s.scope!=="central") return false;
-    if(scopeFilter==="state" && s.scope!=="state") return false;
-    if(search.trim()){
-      const q=search.toLowerCase();
-      return s.name.toLowerCase().includes(q)||s.benefit.toLowerCase().includes(q)||(s.tags||[]).some(tag=>tag.includes(q))||s.category.includes(q);
-    }
+  const filteredResults=(results||[]).filter(s=>{
+    if(categoryFilter!=="all"&&s.category!==categoryFilter)return false;
+    if(scopeFilter==="central"&&s.scope!=="central")return false;
+    if(scopeFilter==="state"&&s.scope!=="state")return false;
+    if(search.trim()){ const q=search.toLowerCase(); return s.name.toLowerCase().includes(q)||s.benefit.toLowerCase().includes(q)||(s.tags||[]).some(tag=>tag.includes(q))||s.category.includes(q); }
     return true;
   });
 
@@ -278,12 +316,17 @@ function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
             </Select>
           </div>
         </div>
-        <button onClick={handleFind} style={{...btnStyle(FLAG.saffron,"#fff"),width:"100%",padding:"13px",fontSize:15,marginTop:16}}>{t(lang,"findBtn")}</button>
+        <button onClick={handleFind} disabled={searching} style={{...btnStyle(searching?"#aaa":FLAG.saffron,"#fff"),width:"100%",padding:"13px",fontSize:15,marginTop:16,opacity:searching?0.8:1}}>
+          {searching?"🔍 Searching...":t(lang,"findBtn")}
+        </button>
       </div>
 
+      {/* FIX 3: Spinner while searching */}
+      {searching && <Spinner T={T}/>}
+
       {/* Results */}
-      {results && (
-        <div>
+      {!searching && results && (
+        <div ref={resultsRef}>
           {/* Summary + actions */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}}>
             <div>
@@ -291,7 +334,7 @@ function FormPage({ T,lang,saved,onToggleSave,applied,onToggleApplied }){
               <span style={{color:T.text2,fontSize:11,marginLeft:8}}>({results.filter(s=>s.scope==="central").length} Central · {results.filter(s=>s.scope==="state").length} State)</span>
             </div>
             <div style={{display:"flex",gap:6}}>
-              <button onClick={()=>shareAllResults(filteredResults,profile)} style={btnStyle("#25D366","#fff",true)}>{t(lang,"whatsappAllBtn")}</button>
+              <button onClick={()=>shareAllResults(filteredResults)} style={btnStyle("#25D366","#fff",true)}>{t(lang,"whatsappAllBtn")}</button>
               <button onClick={handlePDF} disabled={downloading} style={{...btnStyle(FLAG.navy,"#fff",true),opacity:downloading?0.7:1}}>{downloading?"⏳...":t(lang,"pdfBtn")}</button>
             </div>
           </div>
@@ -363,12 +406,12 @@ function DetailPage({ scheme,T,lang,saved,onToggleSave,applied,onToggleApplied,o
   );
 }
 
-// ─── Chat Page (Gemini API) ───────────────────────────────────
+// ─── Chat Page (Gemini) ───────────────────────────────────────
 function ChatPage({ T,lang }){
   const [messages,setMessages] = useState([{role:"model",content:t(lang,"chatWelcome")}]);
   const [input,setInput] = useState("");
   const [loading,setLoading] = useState(false);
-  const bottomRef = useRef(null);
+  const bottomRef=useRef(null);
   useEffect(()=>{ bottomRef.current?.scrollIntoView({behavior:"smooth"}); },[messages]);
 
   const send=async()=>{
@@ -376,16 +419,15 @@ function ChatPage({ T,lang }){
     if(!text||loading)return;
     const userMsg={role:"user",content:text};
     setMessages(m=>[...m,userMsg]);
-    setInput("");
-    setLoading(true);
+    setInput(""); setLoading(true);
     trackEvent("chat_message");
     try{
-      const history = [...messages,userMsg].map(m=>({role:m.role==="assistant"?"model":m.role,parts:[{text:m.content}]}));
-      const res = await fetch(`${GEMINI_URL}?key=${import.meta.env.VITE_GEMINI_API_KEY||""}`,{
+      const history=[...messages,userMsg].map(m=>({role:m.role==="assistant"?"model":m.role,parts:[{text:m.content}]}));
+      const res=await fetch(`${GEMINI_URL}?key=${import.meta.env.VITE_GEMINI_API_KEY||""}`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
-          system_instruction:{parts:[{text:`You are Adhikar Setu, an expert on Indian government schemes. Help users find Central and State schemes they qualify for based on age, state, income, occupation, category (SC/ST/OBC/General) and special status. Be concise, accurate and empathetic. Always mention official URLs. Respond in the user's language (English, Hindi, Telugu or Kannada). You know about PM-JAY, PM Kisan, PMEGP, Mudra Yojana, scholarships, pensions and 58+ verified Central and State schemes across 15 Indian states.`}]},
+          system_instruction:{parts:[{text:`You are Adhikar Setu, an expert on Indian government schemes. Help users find Central and State schemes they qualify for. Be concise, accurate and empathetic. Always mention official URLs. Respond in the user's language (English, Hindi, Telugu or Kannada). Cover PM-JAY, PM Kisan, PMEGP, Mudra and 58+ verified schemes across 15 Indian states.`}]},
           contents:history
         })
       });
@@ -422,18 +464,44 @@ function ChatPage({ T,lang }){
 // ─── Saved Page ───────────────────────────────────────────────
 function SavedPage({ T,lang,saved,onToggleSave,applied,onToggleApplied,onClear }){
   const savedSchemes=SCHEMES.filter(s=>saved.includes(s.id));
+  const appliedSchemes=SCHEMES.filter(s=>applied.includes(s.id));  // FIX 4
   const [detail,setDetail]=useState(null);
   if(detail) return <DetailPage scheme={detail} T={T} lang={lang} saved={saved} onToggleSave={onToggleSave} applied={applied} onToggleApplied={onToggleApplied} onBack={()=>setDetail(null)}/>;
   return (
     <div style={{maxWidth:700,margin:"0 auto",padding:"16px 16px 80px"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+      {/* Saved schemes section */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
         <h2 style={{color:T.text,fontSize:18,fontWeight:700,margin:0}}>{t(lang,"savedTitle")} ({savedSchemes.length})</h2>
-        {savedSchemes.length>0&&<button onClick={onClear} style={btnStyle("#e53935","#fff",true)}>{t(lang,"clearAll")}</button>}
+        <div style={{display:"flex",gap:8}}>
+          {savedSchemes.length>0&&<button onClick={()=>shareAllResults(savedSchemes)} style={btnStyle("#25D366","#fff",true)}>{t(lang,"whatsappAllBtn")}</button>}
+          {savedSchemes.length>0&&<button onClick={onClear} style={btnStyle("#e53935","#fff",true)}>{t(lang,"clearAll")}</button>}
+        </div>
       </div>
       {savedSchemes.length===0
-        ?<div style={{textAlign:"center",color:T.text2,padding:48,fontSize:15}}>{t(lang,"savedEmpty")}</div>
+        ?<div style={{textAlign:"center",color:T.text2,padding:"32px 0",fontSize:15}}>{t(lang,"savedEmpty")}</div>
         :savedSchemes.map(s=><SchemeCard key={s.id} scheme={s} lang={lang} T={T} saved={saved} onToggleSave={onToggleSave} applied={applied} onToggleApplied={onToggleApplied} onDetail={setDetail}/>)
       }
+
+      {/* FIX 4: Applied schemes section — always visible if any applied */}
+      {appliedSchemes.length>0&&(
+        <div style={{marginTop:24}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+            <h3 style={{color:T.text,fontSize:16,fontWeight:700,margin:0}}>✅ Applied Schemes ({appliedSchemes.length})</h3>
+          </div>
+          <div style={{background:T.card,border:`1px solid ${FLAG.green}44`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
+            <p style={{color:T.text2,fontSize:12,margin:"0 0 10px"}}>Schemes you've marked as applied. Tap ✅ on any scheme to unmark.</p>
+            {appliedSchemes.map(s=>(
+              <div key={s.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.border}`}}>
+                <div>
+                  <div style={{fontSize:13,fontWeight:600,color:T.text}}>{s.name}</div>
+                  <div style={{fontSize:11,color:FLAG.green,marginTop:2}}>💰 {s.benefit}</div>
+                </div>
+                <button onClick={()=>onToggleApplied(s.id)} style={{background:"none",border:`1px solid ${T.border}`,borderRadius:6,padding:"4px 8px",fontSize:11,cursor:"pointer",color:T.text2,flexShrink:0,marginLeft:8}}>Unmark</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -441,7 +509,16 @@ function SavedPage({ T,lang,saved,onToggleSave,applied,onToggleApplied,onClear }
 // ─── About Page ───────────────────────────────────────────────
 function AboutPage({ T,lang }){
   const features=[["✅","Verified Data","58+ schemes from myscheme.gov.in"],["🏛️","15 States","State + all central schemes"],["🌍","Multilingual","English, Hindi, Telugu, Kannada"],["📱","Works Offline","Install as app, no internet needed"],["🔒","Private","No data sent to servers"],["🆓","Free Forever","No ads, no registration"]];
-  const analytics=()=>{ try{ const d=JSON.parse(localStorage.getItem("as_analytics")||"[]"); const searches=d.filter(e=>e.event==="search").length; const applies=d.filter(e=>e.event==="apply_click").length; alert(`Your usage:\n🔍 Searches: ${searches}\n📋 Apply clicks: ${applies}\n🔖 Saved: ${JSON.parse(localStorage.getItem("as_saved")||"[]").length}\n✅ Applied: ${JSON.parse(localStorage.getItem("as_applied")||"[]").length}`); }catch{} };
+  const analytics=()=>{
+    try{
+      const d=JSON.parse(localStorage.getItem("as_analytics")||"[]");
+      const searches=d.filter(e=>e.event==="search").length;
+      const applies=d.filter(e=>e.event==="apply_click").length;
+      const saved=JSON.parse(localStorage.getItem("as_saved")||"[]").length;
+      const app=JSON.parse(localStorage.getItem("as_applied")||"[]").length;
+      alert(`Your Usage Stats:\n🔍 Searches done: ${searches}\n📋 Apply clicks: ${applies}\n🔖 Schemes saved: ${saved}\n✅ Schemes applied: ${app}`);
+    }catch{}
+  };
   return (
     <div style={{maxWidth:700,margin:"0 auto",padding:"24px 16px 80px"}}>
       <div style={{textAlign:"center",marginBottom:28}}>
@@ -449,7 +526,7 @@ function AboutPage({ T,lang }){
         <h1 style={{color:T.text,fontSize:22,fontWeight:800,margin:"0 0 8px"}}>{t(lang,"aboutTitle")}</h1>
         <p style={{color:T.text2,fontSize:14,lineHeight:1.6,whiteSpace:"pre-line"}}>{t(lang,"aboutSub")}</p>
       </div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:24}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:20}}>
         {features.map(([icon,title,desc],i)=>(
           <div key={i} style={{background:T.card,border:`1px solid ${T.border}`,borderRadius:12,padding:"14px"}}>
             <div style={{fontSize:24,marginBottom:6}}>{icon}</div>
@@ -469,18 +546,58 @@ function AboutPage({ T,lang }){
   );
 }
 
+// ─── 404 Page ─────────────────────────────────────────────────
+function NotFoundPage({ T,lang,onNav }){
+  return (
+    <div style={{maxWidth:700,margin:"0 auto",padding:"60px 16px",textAlign:"center"}}>
+      <div style={{fontSize:64,marginBottom:16}}>🌉</div>
+      <h1 style={{color:T.text,fontSize:24,fontWeight:800,margin:"0 0 12px"}}>Page Not Found</h1>
+      <p style={{color:T.text2,fontSize:15,marginBottom:28,lineHeight:1.6}}>
+        This page doesn't exist. But your government benefits do —<br/>let's help you find them.
+      </p>
+      <button onClick={()=>onNav("home")} style={{...btnStyle(FLAG.saffron,"#fff"),padding:"13px 28px",fontSize:15}}>🏠 Go Home</button>
+    </div>
+  );
+}
+
 // ─── Root App ─────────────────────────────────────────────────
+const VALID_PAGES=["home","form","chat","saved","about"];
+
 export default function App(){
   const { dark,toggle,T } = useTheme();
   const [lang,setLang] = useState(()=>localStorage.getItem("as_lang")||"en");
-  const [page,setPage] = useState("home");
+  const [page,setPage] = useState(()=>{
+    const hash=window.location.hash.replace("#","");
+    return VALID_PAGES.includes(hash)?hash:"home";
+  });
   const { saved,toggle:toggleSave,clear:clearSaved } = useSaved();
   const { applied,toggle:toggleApplied } = useApplied();
   const { isOffline,installPrompt,installed,promptInstall } = usePWA();
+
   const changeLang=(l)=>{ setLang(l); localStorage.setItem("as_lang",l); };
+  const navigate=(p)=>{ if(VALID_PAGES.includes(p)){ setPage(p); window.location.hash=p; window.scrollTo(0,0); } };
+
+  // Sync hash changes (browser back/forward)
+  useEffect(()=>{
+    const onHash=()=>{ const h=window.location.hash.replace("#",""); if(VALID_PAGES.includes(h)) setPage(h); else setPage("home"); };
+    window.addEventListener("hashchange",onHash);
+    return ()=>window.removeEventListener("hashchange",onHash);
+  },[]);
+
+  const isValid=VALID_PAGES.includes(page);
 
   return (
     <div style={{minHeight:"100vh",background:T.bg,fontFamily:"-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"}}>
+      {/* FIX 9: Plausible analytics script */}
+      {typeof document!=="undefined"&&!document.getElementById("plausible-script")&&(()=>{
+        const s=document.createElement("script");
+        s.id="plausible-script"; s.defer=true;
+        s.setAttribute("data-domain","adhikar-setu.vercel.app");
+        s.src="https://plausible.io/js/script.js";
+        document.head.appendChild(s);
+        return null;
+      })()}
+
       {isOffline&&<div style={{background:"#e53935",color:"#fff",textAlign:"center",padding:"8px 16px",fontSize:13,fontWeight:600}}>📴 {t(lang,"offlineMsg")}</div>}
       {installPrompt&&!installed&&(
         <div style={{background:FLAG.green,color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 16px",fontSize:13}}>
@@ -491,7 +608,7 @@ export default function App(){
       <header style={{background:T.nav,borderBottom:`1px solid ${T.border}`,position:"sticky",top:0,zIndex:100}}>
         <FlagStripe/>
         <div style={{maxWidth:700,margin:"0 auto",padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div onClick={()=>setPage("home")} style={{cursor:"pointer"}}>
+          <div onClick={()=>navigate("home")} style={{cursor:"pointer"}}>
             <div style={{fontWeight:800,fontSize:16,color:FLAG.saffron}}>🌉 {t(lang,"appName")}</div>
             <div style={{fontSize:10,color:T.text2}}>{t(lang,"tagline")}</div>
           </div>
@@ -503,16 +620,23 @@ export default function App(){
           </div>
         </div>
       </header>
+
       <main>
-        {page==="home"  &&<HomePage  T={T} lang={lang} onNav={setPage}/>}
-        {page==="form"  &&<FormPage  T={T} lang={lang} saved={saved} onToggleSave={toggleSave} applied={applied} onToggleApplied={toggleApplied}/>}
-        {page==="chat"  &&<ChatPage  T={T} lang={lang}/>}
-        {page==="saved" &&<SavedPage T={T} lang={lang} saved={saved} onToggleSave={toggleSave} applied={applied} onToggleApplied={toggleApplied} onClear={clearSaved}/>}
-        {page==="about" &&<AboutPage T={T} lang={lang}/>}
+        {/* FIX 10: 404 for invalid pages */}
+        {!isValid&&<NotFoundPage T={T} lang={lang} onNav={navigate}/>}
+        {isValid&&page==="home"  &&<HomePage  T={T} lang={lang} onNav={navigate}/>}
+        {isValid&&page==="form"  &&<FormPage  T={T} lang={lang} saved={saved} onToggleSave={toggleSave} applied={applied} onToggleApplied={toggleApplied}/>}
+        {isValid&&page==="chat"  &&<ChatPage  T={T} lang={lang}/>}
+        {isValid&&page==="saved" &&<SavedPage T={T} lang={lang} saved={saved} onToggleSave={toggleSave} applied={applied} onToggleApplied={toggleApplied} onClear={clearSaved}/>}
+        {isValid&&page==="about" &&<AboutPage T={T} lang={lang}/>}
       </main>
+
+      {/* FIX 7: Back to top */}
+      <BackToTop T={T}/>
+
       <nav style={{position:"fixed",bottom:0,left:0,right:0,background:T.nav,borderTop:`1px solid ${T.border}`,display:"flex",zIndex:100}}>
         {[["home","🏠",t(lang,"navHome")],["form","📋",t(lang,"navForm")],["chat","💬",t(lang,"navChat")],["saved","🔖",t(lang,"navSaved")],["about","ℹ️",t(lang,"navAbout")]].map(([p,icon,label])=>(
-          <button key={p} onClick={()=>setPage(p)} style={{flex:1,background:"none",border:"none",padding:"10px 4px",cursor:"pointer",color:page===p?FLAG.saffron:T.text2,display:"flex",flexDirection:"column",alignItems:"center",gap:2,fontWeight:page===p?700:400}}>
+          <button key={p} onClick={()=>navigate(p)} style={{flex:1,background:"none",border:"none",padding:"10px 4px",cursor:"pointer",color:page===p?FLAG.saffron:T.text2,display:"flex",flexDirection:"column",alignItems:"center",gap:2,fontWeight:page===p?700:400}}>
             <span style={{fontSize:18}}>{icon}</span>
             <span style={{fontSize:9}}>{label.replace(/^[^ ]+ /,"")}</span>
           </button>
