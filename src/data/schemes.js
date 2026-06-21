@@ -1,765 +1,111 @@
-// Real Government Schemes Data
-// Source: myscheme.gov.in — verified scheme information
-// Last updated: 2025
-
 export const SCHEMES = [
-  // ── HEALTH ──────────────────────────────────────────────────
-  {
-    id: "ayushman-bharat",
-    name: "Ayushman Bharat PM-JAY",
-    ministry: "Ministry of Health & Family Welfare",
-    type: "Central",
-    tag: "Health",
-    benefit: "Free health coverage up to ₹5 lakh per family per year for secondary and tertiary care hospitalisation",
-    eligibility: "Families identified in SECC-2011 data; BPL families; income below ₹2.5 lakh",
-    income_max: "2.5lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 0, age_max: 100,
-    occupations: ["Daily Wage Worker","Farmer","Self Employed","Homemaker","Unemployed"],
-    documents: ["Aadhaar Card","Ration Card","Income Certificate"],
-    how_to_apply: "Visit nearest empanelled hospital or Ayushman Mitra. Download Ayushman app or call 14555.",
-    link: "https://pmjay.gov.in",
-    special: []
-  },
-  {
-    id: "pmjjby",
-    name: "PM Jeevan Jyoti Bima Yojana",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Health",
-    benefit: "Life insurance cover of ₹2 lakh on death for just ₹436 per year premium",
-    eligibility: "Age 18–50 years, having a savings bank account",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 50,
-    occupations: ["Daily Wage Worker","Farmer","Self Employed","Government Employee","Private Employee","Homemaker"],
-    documents: ["Aadhaar Card","Bank Account Passbook"],
-    how_to_apply: "Apply through your bank branch or bank's mobile app. Auto-debit of premium from savings account.",
-    link: "https://jansuraksha.gov.in",
-    special: []
-  },
-  {
-    id: "pmsby",
-    name: "PM Suraksha Bima Yojana",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Health",
-    benefit: "Accident insurance ₹2 lakh (death/permanent disability) for just ₹20 per year",
-    eligibility: "Age 18–70 years with savings bank account",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 70,
-    occupations: ["Daily Wage Worker","Farmer","Self Employed","Government Employee","Private Employee","Homemaker","Unemployed"],
-    documents: ["Aadhaar Card","Bank Account Passbook"],
-    how_to_apply: "Apply at bank branch, online banking, or Common Service Centre (CSC).",
-    link: "https://jansuraksha.gov.in",
-    special: []
-  },
-
-  // ── HOUSING ─────────────────────────────────────────────────
-  {
-    id: "pmay-urban",
-    name: "PM Awas Yojana (Urban)",
-    ministry: "Ministry of Housing & Urban Affairs",
-    type: "Central",
-    tag: "Housing",
-    benefit: "Interest subsidy up to ₹2.67 lakh on home loan; grant up to ₹1.5 lakh for construction",
-    eligibility: "EWS (income up to ₹3L), LIG (₹3–6L), MIG-I (₹6–12L), MIG-II (₹12–18L). First-time home buyers only.",
-    income_max: "18lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Daily Wage Worker","Farmer","Self Employed","Government Employee","Private Employee","Homemaker","Unemployed"],
-    documents: ["Aadhaar Card","Income Certificate","Address Proof","Bank Account"],
-    how_to_apply: "Apply at pmaymis.gov.in or nearest Urban Local Body (ULB) office.",
-    link: "https://pmaymis.gov.in",
-    special: []
-  },
-  {
-    id: "pmay-gramin",
-    name: "PM Awas Yojana (Gramin)",
-    ministry: "Ministry of Rural Development",
-    type: "Central",
-    tag: "Housing",
-    benefit: "Financial assistance ₹1.2 lakh (plain areas) or ₹1.3 lakh (hilly/NE areas) for house construction",
-    eligibility: "Homeless or kutcha house rural families from SECC 2011 list",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Farmer","Daily Wage Worker","Homemaker","Unemployed"],
-    documents: ["Aadhaar Card","Job Card (MGNREGA)","Bank Account","Income Certificate"],
-    how_to_apply: "Apply through Gram Panchayat or Block Development Office. Register on pmayg.nic.in.",
-    link: "https://pmayg.nic.in",
-    special: []
-  },
-
-  // ── FINANCE / LOANS ─────────────────────────────────────────
-  {
-    id: "mudra-shishu",
-    name: "PM Mudra Yojana – Shishu",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Collateral-free business loan up to ₹50,000 at subsidised interest rate for micro enterprises",
-    eligibility: "Non-corporate, non-farm micro & small enterprises including shopkeepers, artisans, vendors",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 65,
-    occupations: ["Self Employed","Farmer","Daily Wage Worker","Unemployed"],
-    documents: ["Aadhaar Card","PAN Card","Business Plan/Proof","Bank Account","Address Proof"],
-    how_to_apply: "Apply at any bank, MFI, NBFC or mudra.org.in. No collateral required.",
-    link: "https://mudra.org.in",
-    special: []
-  },
-  {
-    id: "mudra-kishor",
-    name: "PM Mudra Yojana – Kishor",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Business loan ₹50,001 to ₹5 lakh without collateral for growing businesses",
-    eligibility: "Existing micro businesses looking to expand, age 18–65",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 65,
-    occupations: ["Self Employed"],
-    documents: ["Aadhaar Card","PAN Card","Business Proof","ITR (if available)","Bank Statement"],
-    how_to_apply: "Apply at bank branch or online. Business vintage of 2+ years preferred.",
-    link: "https://mudra.org.in",
-    special: []
-  },
-  {
-    id: "mudra-tarun",
-    name: "PM Mudra Yojana – Tarun",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Business loan ₹5 lakh to ₹10 lakh for established enterprises",
-    eligibility: "Well-established micro businesses, age 18–65",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 65,
-    occupations: ["Self Employed"],
-    documents: ["Aadhaar Card","PAN Card","ITR 2 years","Audited Balance Sheet","Business Plan"],
-    how_to_apply: "Apply at PSU bank or private bank. Requires business history.",
-    link: "https://mudra.org.in",
-    special: []
-  },
-  {
-    id: "svanidhi",
-    name: "PM SVANidhi Scheme",
-    ministry: "Ministry of Housing & Urban Affairs",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Working capital loan ₹10,000 (1st), ₹20,000 (2nd), ₹50,000 (3rd) for street vendors",
-    eligibility: "Street vendors who were vending on or before 24 March 2020 with Certificate of Vending",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 65,
-    occupations: ["Self Employed","Daily Wage Worker"],
-    documents: ["Aadhaar Card","Vending Certificate/Letter of Recommendation","Bank Account"],
-    how_to_apply: "Apply at pmsvanidhi.mohua.gov.in or through scheduled commercial bank.",
-    link: "https://pmsvanidhi.mohua.gov.in",
-    special: []
-  },
-  {
-    id: "standup-india",
-    name: "Stand Up India Scheme",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Bank loan between ₹10 lakh to ₹1 crore for greenfield enterprises",
-    eligibility: "SC/ST borrowers or women entrepreneurs, age 18+, first-time enterprise",
-    income_max: "any",
-    categories: ["SC","ST"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 65,
-    occupations: ["Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","PAN Card","Caste Certificate (SC/ST)","Business Plan","Address Proof"],
-    how_to_apply: "Apply at standupmitra.in or any scheduled commercial bank branch.",
-    link: "https://standupmitra.in",
-    special: []
-  },
-
-  // ── AGRICULTURE ─────────────────────────────────────────────
-  {
-    id: "pm-kisan",
-    name: "PM Kisan Samman Nidhi",
-    ministry: "Ministry of Agriculture",
-    type: "Central",
-    tag: "Agriculture",
-    benefit: "Direct income support ₹6,000 per year (₹2,000 in 3 instalments) to farmer families",
-    eligibility: "All landholder farmer families with cultivable land. Excludes government employees, taxpayers.",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Farmer"],
-    documents: ["Aadhaar Card","Land Records","Bank Account"],
-    how_to_apply: "Register at pmkisan.gov.in or through local Patwari/Revenue Officer.",
-    link: "https://pmkisan.gov.in",
-    special: []
-  },
-  {
-    id: "kisan-credit-card",
-    name: "Kisan Credit Card (KCC)",
-    ministry: "Ministry of Agriculture",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Flexible credit up to ₹3 lakh at 4% interest rate for crop production and allied activities",
-    eligibility: "All farmers, tenant farmers, sharecroppers, SHG members involved in agriculture",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 75,
-    occupations: ["Farmer"],
-    documents: ["Aadhaar Card","Land Records/Lease Agreement","Passport Photo","Bank Account"],
-    how_to_apply: "Apply at nearest bank branch or through Common Service Centre with land documents.",
-    link: "https://pmkisan.gov.in/KCC.aspx",
-    special: []
-  },
-  {
-    id: "fasal-bima",
-    name: "PM Fasal Bima Yojana",
-    ministry: "Ministry of Agriculture",
-    type: "Central",
-    tag: "Agriculture",
-    benefit: "Crop insurance covering losses due to drought, flood, pest attacks. Premium as low as 1.5% for Rabi crops.",
-    eligibility: "All farmers growing notified crops in notified areas",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Farmer"],
-    documents: ["Aadhaar Card","Land Records","Bank Account","Sowing Certificate"],
-    how_to_apply: "Enrol through nearest bank, insurance company or CSC before the cut-off date.",
-    link: "https://pmfby.gov.in",
-    special: []
-  },
-
-  // ── EDUCATION ───────────────────────────────────────────────
-  {
-    id: "nsp-prematric",
-    name: "Pre-Matric Scholarship (Minorities)",
-    ministry: "Ministry of Minority Affairs",
-    type: "Central",
-    tag: "Education",
-    benefit: "Scholarship ₹1,000–₹10,000 per year for students studying in Classes 1–10",
-    eligibility: "Minority community students (Muslim/Christian/Sikh/Buddhist/Parsi/Jain) with family income below ₹1 lakh",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 6, age_max: 18,
-    occupations: ["Student"],
-    documents: ["Aadhaar Card","Income Certificate","Community Certificate","Previous Marksheet","Bank Account"],
-    how_to_apply: "Apply at scholarships.gov.in (National Scholarship Portal). Deadline usually September–October.",
-    link: "https://scholarships.gov.in",
-    special: []
-  },
-  {
-    id: "nsp-postmatric-sc",
-    name: "Post-Matric Scholarship for SC Students",
-    ministry: "Ministry of Social Justice",
-    type: "Central",
-    tag: "Education",
-    benefit: "Full tuition fee + maintenance allowance ₹380–₹1,200 per month for Class 11 and above",
-    eligibility: "SC students with family income below ₹2.5 lakh, studying post-matric courses",
-    income_max: "2.5lakh",
-    categories: ["SC"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 15, age_max: 35,
-    occupations: ["Student"],
-    documents: ["Aadhaar Card","Caste Certificate","Income Certificate","Previous Marksheet","Bank Account"],
-    how_to_apply: "Apply at scholarships.gov.in before the state's deadline.",
-    link: "https://scholarships.gov.in",
-    special: []
-  },
-  {
-    id: "vidya-lakshmi",
-    name: "Vidya Lakshmi Education Loan",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Loan",
-    benefit: "Education loan up to ₹6.5 lakh (no collateral) or ₹15 lakh+ (with collateral) at subsidised rates",
-    eligibility: "Indian students admitted to recognised professional/technical courses in India or abroad",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 16, age_max: 35,
-    occupations: ["Student"],
-    documents: ["Aadhaar Card","Admission Letter","Marksheets","Co-borrower PAN","Bank Account"],
-    how_to_apply: "Single window application at vidyalakshmi.co.in for multiple banks simultaneously.",
-    link: "https://www.vidyalakshmi.co.in",
-    special: []
-  },
-
-  // ── WOMEN ────────────────────────────────────────────────────
-  {
-    id: "sukanya-samridhi",
-    name: "Sukanya Samriddhi Yojana",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Women",
-    benefit: "8.2% interest p.a. tax-free savings scheme for girl child education and marriage expenses",
-    eligibility: "Parents/guardians of girl child below 10 years of age",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 0, age_max: 10,
-    occupations: ["Student","Homemaker","Farmer","Self Employed","Government Employee","Private Employee"],
-    documents: ["Girl Child Birth Certificate","Parent Aadhaar","Address Proof"],
-    how_to_apply: "Open account at Post Office or authorised bank. Minimum deposit ₹250.",
-    link: "https://www.nsiindia.gov.in",
-    special: []
-  },
-  {
-    id: "pradhan-mantri-matru-vandana",
-    name: "PM Matru Vandana Yojana",
-    ministry: "Ministry of Women & Child Development",
-    type: "Central",
-    tag: "Women",
-    benefit: "Cash benefit ₹5,000 for 1st child and ₹6,000 for 2nd child (girl) directly to bank account",
-    eligibility: "Pregnant women and lactating mothers for first/second child",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 19, age_max: 45,
-    occupations: ["Homemaker","Farmer","Daily Wage Worker","Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","Bank Account","MCP Card (Mother Child Protection)","Pregnancy Certificate"],
-    how_to_apply: "Register at nearest Anganwadi Centre or health facility within 150 days of pregnancy.",
-    link: "https://pmmvy.wcd.gov.in",
-    special: ["Pregnant / Lactating"]
-  },
-
-  // ── PENSION ─────────────────────────────────────────────────
-  {
-    id: "atal-pension",
-    name: "Atal Pension Yojana",
-    ministry: "Ministry of Finance",
-    type: "Central",
-    tag: "Finance",
-    benefit: "Guaranteed monthly pension ₹1,000–₹5,000 after age 60. Government co-contributes 50% or ₹1,000/year.",
-    eligibility: "Age 18–40 years, savings bank account, not covered under statutory social security",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 40,
-    occupations: ["Daily Wage Worker","Farmer","Self Employed","Homemaker"],
-    documents: ["Aadhaar Card","Savings Bank Account","Mobile Number"],
-    how_to_apply: "Enrol through bank branch, mobile banking, or online banking portal.",
-    link: "https://npscra.nsdl.co.in",
-    special: []
-  },
-  {
-    id: "nsap-ignoaps",
-    name: "Indira Gandhi National Old Age Pension",
-    ministry: "Ministry of Rural Development",
-    type: "Central",
-    tag: "Social Welfare",
-    benefit: "Monthly pension ₹200 (age 60–79) and ₹500 (age 80+) transferred to bank account",
-    eligibility: "BPL senior citizens aged 60 and above",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 60, age_max: 100,
-    occupations: ["Senior Citizen","Unemployed","Homemaker"],
-    documents: ["Aadhaar Card","Age Proof","BPL Certificate","Bank Account"],
-    how_to_apply: "Apply at Gram Panchayat (rural) or Municipal Office (urban).",
-    link: "https://nsap.nic.in",
-    special: []
-  },
-
-  // ── EMPLOYMENT ───────────────────────────────────────────────
-  {
-    id: "mgnregs",
-    name: "MGNREGA – Mahatma Gandhi Rural Employment",
-    ministry: "Ministry of Rural Development",
-    type: "Central",
-    tag: "Employment",
-    benefit: "Guaranteed 100 days of wage employment per year at minimum wages (₹230–₹333/day by state)",
-    eligibility: "Adult members of rural households willing to do unskilled manual work",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Daily Wage Worker","Farmer","Homemaker","Unemployed"],
-    documents: ["Aadhaar Card","Job Card (apply at Gram Panchayat)","Bank Account"],
-    how_to_apply: "Register at Gram Panchayat to get Job Card. Work demand submitted to GP.",
-    link: "https://nrega.nic.in",
-    special: []
-  },
-  {
-    id: "pmegp",
-    name: "PM Employment Generation Programme",
-    ministry: "Ministry of MSME",
-    type: "Central",
-    tag: "Employment",
-    benefit: "25–35% subsidy on project cost up to ₹50 lakh (manufacturing) or ₹20 lakh (service sector)",
-    eligibility: "Any individual above 18 years for project cost above ₹10 lakh (manufacturing) or ₹5 lakh (service)",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 65,
-    occupations: ["Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","PAN Card","Educational Certificate (8th pass min)","Project Report","Bank Account"],
-    how_to_apply: "Apply online at kviconline.gov.in or through KVIC/KVIB/DIC offices.",
-    link: "https://www.kviconline.gov.in/pmegpeportal",
-    special: []
-  },
-  {
-    id: "pm-vishwakarma",
-    name: "PM Vishwakarma Yojana",
-    ministry: "Ministry of MSME",
-    type: "Central",
-    tag: "Employment",
-    benefit: "₹15,000 toolkit grant, skill training with ₹500/day stipend, and collateral-free loan up to ₹3 lakh at 5% interest",
-    eligibility: "Traditional artisans and craftspeople in 18 trades (carpenter, blacksmith, potter, tailor, cobbler, etc.)",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 70,
-    occupations: ["Self Employed","Daily Wage Worker","Unemployed"],
-    documents: ["Aadhaar Card","Bank Account","Mobile Number","Ration Card"],
-    how_to_apply: "Register via Common Service Centre (CSC) at pmvishwakarma.gov.in with biometric verification.",
-    link: "https://pmvishwakarma.gov.in",
-    special: []
-  },
-  {
-    id: "e-shram",
-    name: "e-Shram Card (Unorganised Workers)",
-    ministry: "Ministry of Labour & Employment",
-    type: "Central",
-    tag: "Social Welfare",
-    benefit: "Universal Account Number with ₹2 lakh accidental insurance cover and access to social security schemes",
-    eligibility: "Unorganised sector workers aged 16–59 not covered by EPFO/ESIC",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 16, age_max: 59,
-    occupations: ["Daily Wage Worker","Self Employed","Farmer","Homemaker"],
-    documents: ["Aadhaar Card","Aadhaar-linked Mobile Number","Bank Account"],
-    how_to_apply: "Register free at eshram.gov.in or nearest Common Service Centre (CSC).",
-    link: "https://eshram.gov.in",
-    special: []
-  },
-  {
-    id: "pm-surya-ghar",
-    name: "PM Surya Ghar Muft Bijli Yojana",
-    ministry: "Ministry of New & Renewable Energy",
-    type: "Central",
-    tag: "Finance",
-    benefit: "Subsidy up to ₹78,000 for rooftop solar panels, giving up to 300 units free electricity per month",
-    eligibility: "Households owning a roof with a valid electricity connection and no existing solar subsidy",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Self Employed","Government Employee","Private Employee","Farmer","Homemaker","Senior Citizen"],
-    documents: ["Aadhaar Card","Electricity Bill","Roof Ownership Proof","Bank Account"],
-    how_to_apply: "Apply at pmsuryaghar.gov.in, pick a registered vendor; subsidy credited after installation.",
-    link: "https://pmsuryaghar.gov.in",
-    special: []
-  },
-
-  // ── HEALTH (additional) ──────────────────────────────────────
-  {
-    id: "ayushman-vay-vandana",
-    name: "Ayushman Vay Vandana (70+ Health Cover)",
-    ministry: "Ministry of Health & Family Welfare",
-    type: "Central",
-    tag: "Health",
-    benefit: "Free health insurance up to ₹5 lakh per year for all senior citizens aged 70 and above, irrespective of income",
-    eligibility: "All citizens aged 70 years and above regardless of income or category",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 70, age_max: 100,
-    occupations: ["Senior Citizen","Homemaker","Unemployed","Self Employed","Government Employee","Private Employee","Farmer"],
-    documents: ["Aadhaar Card","Age Proof"],
-    how_to_apply: "Enrol on the Ayushman app or PMJAY portal; a new card is issued for 70+ citizens.",
-    link: "https://pmjay.gov.in",
-    special: []
-  },
-  {
-    id: "jsy",
-    name: "Janani Suraksha Yojana",
-    ministry: "Ministry of Health & Family Welfare",
-    type: "Central",
-    tag: "Health",
-    benefit: "Cash assistance ₹1,400 (rural) / ₹1,000 (urban) for institutional delivery, plus free delivery care",
-    eligibility: "Pregnant women opting for institutional delivery; priority to BPL/SC/ST mothers",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 18, age_max: 49,
-    occupations: ["Homemaker","Daily Wage Worker","Farmer","Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","JSY Card / MCP Card","Bank Account","Delivery Certificate"],
-    how_to_apply: "Register with your ASHA worker or at the nearest government health centre/PHC.",
-    link: "https://nhm.gov.in",
-    special: ["Pregnant / Lactating"]
-  },
-  {
-    id: "echs",
-    name: "Ex-Servicemen Contributory Health Scheme",
-    ministry: "Ministry of Defence",
-    type: "Central",
-    tag: "Health",
-    benefit: "Cashless lifelong medical care for ex-servicemen and dependents at ECHS polyclinics and empanelled hospitals",
-    eligibility: "Ex-servicemen pensioners and their dependents",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 30, age_max: 100,
-    occupations: ["Government Employee","Senior Citizen","Self Employed","Unemployed","Homemaker"],
-    documents: ["Aadhaar Card","Ex-Servicemen Identity Card","Discharge Book","PPO (Pension Payment Order)"],
-    how_to_apply: "Apply online at echs.gov.in and submit at the nearest ECHS Station Headquarters.",
-    link: "https://echs.gov.in",
-    special: ["Ex-Serviceman"]
-  },
-
-  // ── SOCIAL WELFARE (additional) ──────────────────────────────
-  {
-    id: "nsap-ignwps",
-    name: "Indira Gandhi National Widow Pension",
-    ministry: "Ministry of Rural Development",
-    type: "Central",
-    tag: "Social Welfare",
-    benefit: "Monthly pension ₹300 (age 40–79) and ₹500 (age 80+) to widows from BPL families",
-    eligibility: "Widows aged 40–79 from Below Poverty Line households",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 40, age_max: 100,
-    occupations: ["Homemaker","Daily Wage Worker","Unemployed","Self Employed","Farmer"],
-    documents: ["Aadhaar Card","Husband's Death Certificate","BPL Certificate","Bank Account"],
-    how_to_apply: "Apply at Gram Panchayat (rural) or Municipal/SDM office (urban) with the death certificate.",
-    link: "https://nsap.nic.in",
-    special: ["Widow"]
-  },
-  {
-    id: "nsap-igndps",
-    name: "Indira Gandhi National Disability Pension",
-    ministry: "Ministry of Rural Development",
-    type: "Central",
-    tag: "Social Welfare",
-    benefit: "Monthly pension ₹300 (age 18–79) and ₹500 (age 80+) to severely disabled persons from BPL families",
-    eligibility: "Persons aged 18+ with 80% or more disability from Below Poverty Line households",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Unemployed","Homemaker","Daily Wage Worker","Self Employed","Differently Abled"],
-    documents: ["Aadhaar Card","Disability Certificate (UDID)","BPL Certificate","Bank Account"],
-    how_to_apply: "Apply at Gram Panchayat or Municipal office with the UDID disability certificate.",
-    link: "https://nsap.nic.in",
-    special: ["Differently Abled"]
-  },
-  {
-    id: "adip",
-    name: "ADIP – Aids & Appliances for Disabled",
-    ministry: "Ministry of Social Justice & Empowerment",
-    type: "Central",
-    tag: "Social Welfare",
-    benefit: "Free or subsidised assistive devices — wheelchairs, hearing aids, prosthetics, motorised tricycles",
-    eligibility: "Persons with 40%+ disability; monthly income up to ₹30,000 for full/partial subsidy",
-    income_max: "3lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 0, age_max: 100,
-    occupations: ["Student","Unemployed","Homemaker","Daily Wage Worker","Self Employed","Differently Abled","Senior Citizen"],
-    documents: ["Aadhaar Card","Disability Certificate (UDID)","Income Certificate","Passport Photo"],
-    how_to_apply: "Apply at ADIP camps, ALIMCO, or the District Disability Rehabilitation Centre (DDRC).",
-    link: "https://disabilityaffairs.gov.in",
-    special: ["Differently Abled"]
-  },
-  {
-    id: "pmuy",
-    name: "PM Ujjwala Yojana (LPG Connection)",
-    ministry: "Ministry of Petroleum & Natural Gas",
-    type: "Central",
-    tag: "Social Welfare",
-    benefit: "Free LPG connection with ₹1,600 support plus first refill and stove free for women of poor households",
-    eligibility: "Adult women from BPL/poor households without an existing LPG connection",
-    income_max: "1lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 18, age_max: 100,
-    occupations: ["Homemaker","Daily Wage Worker","Farmer","Unemployed","Self Employed"],
-    documents: ["Aadhaar Card","BPL Ration Card","Bank Account","Address Proof"],
-    how_to_apply: "Apply at the nearest LPG distributor (Indane/HP/Bharat Gas) or at pmuy.gov.in.",
-    link: "https://www.pmuy.gov.in",
-    special: ["BPL Card Holder"]
-  },
+  // ── CENTRAL SCHEMES ─────────────────────────────────────────
+  { id:"pmjay", name:"PM Jan Arogya Yojana (PM-JAY)", ministry:"Ministry of Health & Family Welfare", category:"health", scope:"central", states:[], benefit:"₹5 lakh/year health insurance per family", eligibility:{ maxIncome:300000, categories:["general","obc","sc","st"], occupations:["farmer","daily_wage","self_employed","unemployed"] }, description:"Provides ₹5 lakh annual health cover for secondary and tertiary hospitalization to bottom 40% families.", documents:["Aadhaar Card","Ration Card","Income Certificate"], applyUrl:"https://pmjay.gov.in", tags:["health","insurance"] },
+  { id:"pmsby", name:"PM Suraksha Bima Yojana", ministry:"Ministry of Finance", category:"insurance", scope:"central", states:[], benefit:"₹2 lakh accident insurance at ₹20/year", eligibility:{ minAge:18, maxAge:70, categories:["general","obc","sc","st"], occupations:["all"] }, description:"Accidental death and disability insurance cover of ₹2 lakh for just ₹20/year.", documents:["Aadhaar Card","Bank Account"], applyUrl:"https://jansuraksha.gov.in", tags:["insurance","accident"] },
+  { id:"pmjjby", name:"PM Jeevan Jyoti Bima Yojana", ministry:"Ministry of Finance", category:"insurance", scope:"central", states:[], benefit:"₹2 lakh life insurance at ₹436/year", eligibility:{ minAge:18, maxAge:50, categories:["general","obc","sc","st"], occupations:["all"] }, description:"Life insurance cover of ₹2 lakh for death due to any reason.", documents:["Aadhaar Card","Bank Account"], applyUrl:"https://jansuraksha.gov.in", tags:["insurance","life"] },
+  { id:"ayushman_hwc", name:"Ayushman Bharat - Health & Wellness Centres", ministry:"Ministry of Health & Family Welfare", category:"health", scope:"central", states:[], benefit:"Free comprehensive primary healthcare", eligibility:{ categories:["general","obc","sc","st"], occupations:["all"] }, description:"Free medicines, diagnostics and primary healthcare at Health and Wellness Centres.", documents:["Aadhaar Card"], applyUrl:"https://ab-hwc.nhp.gov.in", tags:["health","free"] },
+  { id:"pmay_urban", name:"PM Awas Yojana - Urban", ministry:"Ministry of Housing & Urban Affairs", category:"housing", scope:"central", states:[], benefit:"Up to ₹2.67 lakh subsidy on home loan", eligibility:{ maxIncome:1800000, categories:["general","obc","sc","st"] }, description:"Credit linked subsidy scheme for housing in urban areas.", documents:["Aadhaar Card","Income Certificate","Bank Account","Land Documents"], applyUrl:"https://pmaymis.gov.in", tags:["housing","loan","urban"] },
+  { id:"pmay_gramin", name:"PM Awas Yojana - Gramin", ministry:"Ministry of Rural Development", category:"housing", scope:"central", states:[], benefit:"₹1.2–1.3 lakh for house construction", eligibility:{ maxIncome:120000, categories:["general","obc","sc","st"], occupations:["farmer","daily_wage"] }, description:"Financial assistance to rural BPL households to construct permanent houses.", documents:["Aadhaar Card","BPL Card","Bank Account","Land Documents"], applyUrl:"https://pmayg.nic.in", tags:["housing","rural","bpl"] },
+  { id:"pmkisan", name:"PM Kisan Samman Nidhi", ministry:"Ministry of Agriculture", category:"agriculture", scope:"central", states:[], benefit:"₹6,000/year direct to bank (₹2,000 × 3 installments)", eligibility:{ categories:["general","obc","sc","st"], occupations:["farmer"] }, description:"Income support of ₹6,000/year to all land-holding farmer families.", documents:["Aadhaar Card","Land Records","Bank Account"], applyUrl:"https://pmkisan.gov.in", tags:["farmer","cash","agriculture"] },
+  { id:"pmfby", name:"PM Fasal Bima Yojana", ministry:"Ministry of Agriculture", category:"agriculture", scope:"central", states:[], benefit:"Crop insurance at 2% premium for Kharif, 1.5% for Rabi", eligibility:{ categories:["general","obc","sc","st"], occupations:["farmer"] }, description:"Comprehensive crop insurance against natural calamities, pests and diseases.", documents:["Aadhaar Card","Land Records","Bank Account","Sowing Certificate"], applyUrl:"https://pmfby.gov.in", tags:["farmer","insurance","crop"] },
+  { id:"kcc", name:"Kisan Credit Card (KCC)", ministry:"Ministry of Agriculture", category:"agriculture", scope:"central", states:[], benefit:"Up to ₹3 lakh credit at 4% interest", eligibility:{ categories:["general","obc","sc","st"], occupations:["farmer"] }, description:"Short-term credit needs of farmers for cultivation and post-harvest expenses.", documents:["Aadhaar Card","Land Records","Bank Account"], applyUrl:"https://www.nabard.org", tags:["farmer","credit","loan"] },
+  { id:"nsp_obc", name:"Central Scholarship for OBC Students", ministry:"Ministry of Social Justice", category:"education", scope:"central", states:[], benefit:"₹1,000–₹1,500/month scholarship", eligibility:{ maxAge:30, maxIncome:300000, categories:["obc"], occupations:["student"] }, description:"Scholarship to OBC students pursuing technical or professional courses.", documents:["Aadhaar Card","Income Certificate","Caste Certificate","Marksheet","Bank Account"], applyUrl:"https://scholarships.gov.in", tags:["education","scholarship","obc"] },
+  { id:"nsp_sc", name:"Post Matric Scholarship for SC Students", ministry:"Ministry of Social Justice", category:"education", scope:"central", states:[], benefit:"Full course fee + maintenance allowance", eligibility:{ maxIncome:250000, categories:["sc"], occupations:["student"] }, description:"Financial assistance to SC students studying post-matriculation courses.", documents:["Aadhaar Card","Caste Certificate","Income Certificate","Marksheet","Bank Account"], applyUrl:"https://scholarships.gov.in", tags:["education","scholarship","sc"] },
+  { id:"nsp_st", name:"Post Matric Scholarship for ST Students", ministry:"Ministry of Tribal Affairs", category:"education", scope:"central", states:[], benefit:"Full course fee + maintenance allowance", eligibility:{ maxIncome:250000, categories:["st"], occupations:["student"] }, description:"Financial assistance to ST students studying post-matriculation courses.", documents:["Aadhaar Card","Tribe Certificate","Income Certificate","Marksheet","Bank Account"], applyUrl:"https://scholarships.gov.in", tags:["education","scholarship","st"] },
+  { id:"nmms", name:"National Means-cum-Merit Scholarship", ministry:"Ministry of Education", category:"education", scope:"central", states:[], benefit:"₹12,000/year for Class 9–12", eligibility:{ minAge:13, maxAge:18, maxIncome:150000, categories:["general","obc","sc","st"], occupations:["student"] }, description:"Scholarship to meritorious students of economically weaker sections.", documents:["Aadhaar Card","Income Certificate","Previous Marksheet","Bank Account"], applyUrl:"https://scholarships.gov.in", tags:["education","scholarship","merit"] },
+  { id:"pmmvy", name:"PM Matru Vandana Yojana", ministry:"Ministry of Women & Child Development", category:"women", scope:"central", states:[], benefit:"₹5,000 maternity benefit in installments", eligibility:{ minAge:19, maxAge:45, gender:["female"], categories:["general","obc","sc","st"] }, description:"Cash incentive of ₹5,000 to pregnant and lactating mothers for first live birth.", documents:["Aadhaar Card","Bank Account","MCP Card","Pregnancy Certificate"], applyUrl:"https://wcd.nic.in", tags:["women","maternity","pregnancy"] },
+  { id:"ssy", name:"Sukanya Samriddhi Yojana", ministry:"Ministry of Finance", category:"women", scope:"central", states:[], benefit:"8.2% interest savings scheme for girl child", eligibility:{ maxAge:10, gender:["female"], categories:["general","obc","sc","st"] }, description:"Small savings scheme for parents of girl child with tax benefits and high interest.", documents:["Birth Certificate","Parent Aadhaar","Bank/Post Office"], applyUrl:"https://www.indiapost.gov.in", tags:["women","savings","girl"] },
+  { id:"ignoaps", name:"Indira Gandhi National Old Age Pension", ministry:"Ministry of Rural Development", category:"pension", scope:"central", states:[], benefit:"₹200–500/month pension", eligibility:{ minAge:60, maxIncome:120000, categories:["general","obc","sc","st"] }, description:"Monthly pension for BPL elderly persons aged 60 years and above.", documents:["Aadhaar Card","Age Proof","BPL Card","Bank Account"], applyUrl:"https://nsap.nic.in", tags:["pension","elderly","bpl"] },
+  { id:"ignwps", name:"Indira Gandhi National Widow Pension", ministry:"Ministry of Rural Development", category:"pension", scope:"central", states:[], benefit:"₹300/month pension", eligibility:{ minAge:40, maxAge:79, maxIncome:120000, gender:["female"], specialStatus:["widow"] }, description:"Monthly pension for widows aged 40-79 in BPL households.", documents:["Aadhaar Card","Death Certificate of Husband","BPL Card","Bank Account"], applyUrl:"https://nsap.nic.in", tags:["pension","widow","women"] },
+  { id:"pmegp", name:"PM Employment Generation Programme", ministry:"Ministry of MSME", category:"employment", scope:"central", states:[], benefit:"15–35% subsidy on project cost up to ₹50 lakh", eligibility:{ minAge:18, maxIncome:500000, categories:["general","obc","sc","st"] }, description:"Credit-linked subsidy scheme for setting up new micro enterprises.", documents:["Aadhaar Card","Pan Card","Project Report","Bank Account"], applyUrl:"https://www.kviconline.gov.in/pmegpeportal", tags:["employment","business","loan","msme"] },
+  { id:"pmkvy", name:"PM Kaushal Vikas Yojana", ministry:"Ministry of Skill Development", category:"employment", scope:"central", states:[], benefit:"Free skill training + ₹8,000 average reward", eligibility:{ minAge:15, maxAge:45, categories:["general","obc","sc","st"] }, description:"Free skill training to youth with monetary reward for successful completion.", documents:["Aadhaar Card","Bank Account","Educational Certificate"], applyUrl:"https://www.pmkvyofficial.org", tags:["employment","skill","training","youth"] },
+  { id:"mgnregs", name:"Mahatma Gandhi NREGS", ministry:"Ministry of Rural Development", category:"employment", scope:"central", states:[], benefit:"100 days guaranteed wage employment/year", eligibility:{ minAge:18, categories:["general","obc","sc","st"], occupations:["daily_wage","unemployed"] }, description:"Guarantees 100 days of wage employment to rural households.", documents:["Aadhaar Card","Job Card","Bank Account"], applyUrl:"https://nrega.nic.in", tags:["employment","rural","wage"] },
+  { id:"mudra", name:"PM Mudra Yojana", ministry:"Ministry of Finance", category:"business", scope:"central", states:[], benefit:"Loans ₹50,000 to ₹10 lakh without collateral", eligibility:{ minAge:18, categories:["general","obc","sc","st"], occupations:["self_employed","business"] }, description:"Micro finance loans in three categories: Shishu (₹50K), Kishore (₹5L), Tarun (₹10L).", documents:["Aadhaar Card","Pan Card","Business Plan","Bank Account"], applyUrl:"https://www.mudra.org.in", tags:["business","loan","startup","msme"] },
+  { id:"standup_india", name:"Stand-Up India", ministry:"Ministry of Finance", category:"business", scope:"central", states:[], benefit:"₹10 lakh–1 crore bank loan for SC/ST/Women", eligibility:{ minAge:18, categories:["sc","st"] }, description:"Bank loans between ₹10 lakh and ₹1 crore for SC/ST and women entrepreneurs.", documents:["Aadhaar Card","Pan Card","Business Plan","Caste Certificate","Bank Account"], applyUrl:"https://www.standupmitra.in", tags:["business","loan","sc","st","women"] },
+  { id:"ddc", name:"Divyangjan Swavalamban Scheme", ministry:"Ministry of Social Justice", category:"disability", scope:"central", states:[], benefit:"Assistive devices + ₹1 lakh loan at 4% interest", eligibility:{ categories:["general","obc","sc","st"], specialStatus:["disability"] }, description:"Concessional loans and grants for persons with disabilities.", documents:["Aadhaar Card","Disability Certificate","Bank Account","Income Certificate"], applyUrl:"https://www.nhfdc.nic.in", tags:["disability","loan","assistive"] },
+  { id:"ignsdps", name:"Indira Gandhi National Disability Pension", ministry:"Ministry of Rural Development", category:"disability", scope:"central", states:[], benefit:"₹300/month pension", eligibility:{ minAge:18, maxAge:79, maxIncome:120000, specialStatus:["disability"] }, description:"Monthly pension for persons with severe disabilities in BPL households.", documents:["Aadhaar Card","Disability Certificate (80%+)","BPL Card","Bank Account"], applyUrl:"https://nsap.nic.in", tags:["pension","disability","bpl"] },
+  { id:"nmdfc", name:"National Minority Development Finance Schemes", ministry:"Ministry of Minority Affairs", category:"minority", scope:"central", states:[], benefit:"Concessional loans at 6% for education and business", eligibility:{ maxIncome:600000, specialStatus:["minority"] }, description:"Term loans for education, self-employment for minorities.", documents:["Aadhaar Card","Minority Certificate","Income Certificate","Bank Account"], applyUrl:"https://www.nmdfc.org", tags:["minority","loan","education"] },
+  { id:"pmvvy", name:"PM Vaya Vandana Yojana", ministry:"Ministry of Finance", category:"pension", scope:"central", states:[], benefit:"Guaranteed 7.4% return pension for senior citizens", eligibility:{ minAge:60, categories:["general","obc","sc","st"] }, description:"Pension scheme for senior citizens providing assured return of 7.4% for 10 years.", documents:["Aadhaar Card","Age Proof","Bank Account"], applyUrl:"https://licindia.in", tags:["pension","senior","investment"] },
 
   // ── STATE SCHEMES ────────────────────────────────────────────
-  {
-    id: "ka-gruha-lakshmi",
-    name: "Gruha Lakshmi Scheme (Karnataka)",
-    ministry: "Govt of Karnataka – Women & Child Development",
-    type: "State",
-    tag: "Women",
-    benefit: "₹2,000 per month financial assistance to the woman head of every eligible household",
-    eligibility: "Woman head of family (APL/BPL/Antyodaya ration card) in Karnataka; not a taxpayer/GST filer",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 18, age_max: 100,
-    occupations: ["Homemaker","Daily Wage Worker","Farmer","Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","Ration Card","Bank Account (Aadhaar-linked)"],
-    how_to_apply: "Apply via the Seva Sindhu portal or at Karnataka One / Gram One centres.",
-    link: "https://sevasindhuservices.karnataka.gov.in",
-    states: ["Karnataka"],
-    special: []
-  },
-  {
-    id: "ka-yuva-nidhi",
-    name: "Yuva Nidhi (Karnataka Unemployment Aid)",
-    ministry: "Govt of Karnataka – Skill Development",
-    type: "State",
-    tag: "Employment",
-    benefit: "₹3,000/month (graduates) or ₹1,500/month (diploma holders) unemployment allowance for up to 2 years",
-    eligibility: "Karnataka graduates/diploma holders of 2022–23 onwards unemployed for 6+ months after passing",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 21, age_max: 35,
-    occupations: ["Unemployed","Student"],
-    documents: ["Aadhaar Card","Degree/Diploma Certificate","Karnataka Domicile","Bank Account"],
-    how_to_apply: "Apply on the Seva Sindhu portal with degree and domicile details.",
-    link: "https://sevasindhuservices.karnataka.gov.in",
-    states: ["Karnataka"],
-    special: []
-  },
-  {
-    id: "tn-magalir-urimai",
-    name: "Kalaignar Magalir Urimai Thogai (Tamil Nadu)",
-    ministry: "Govt of Tamil Nadu – Social Welfare",
-    type: "State",
-    tag: "Women",
-    benefit: "₹1,000 per month to women heads of eligible families",
-    eligibility: "Woman head of household in Tamil Nadu; family income below ₹2.5 lakh, not income-tax payers",
-    income_max: "3lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 21, age_max: 100,
-    occupations: ["Homemaker","Daily Wage Worker","Farmer","Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","Ration Card","Tamil Nadu Domicile","Bank Account"],
-    how_to_apply: "Apply at Amma Nokkam camps or via kmut.tn.gov.in / e-Sevai centres.",
-    link: "https://kmut.tn.gov.in",
-    states: ["Tamil Nadu"],
-    special: []
-  },
-  {
-    id: "mh-ladki-bahin",
-    name: "Mukhyamantri Majhi Ladki Bahin (Maharashtra)",
-    ministry: "Govt of Maharashtra – Women & Child Development",
-    type: "State",
-    tag: "Women",
-    benefit: "₹1,500 per month financial assistance to eligible women",
-    eligibility: "Women aged 21–65 in Maharashtra; family income below ₹2.5 lakh; not income-tax payers",
-    income_max: "3lakh",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Female"],
-    age_min: 21, age_max: 65,
-    occupations: ["Homemaker","Daily Wage Worker","Farmer","Self Employed","Unemployed"],
-    documents: ["Aadhaar Card","Maharashtra Domicile","Ration Card","Bank Account (Aadhaar-linked)"],
-    how_to_apply: "Apply via the Nari Shakti Doot app or at Anganwadi / Setu centres.",
-    link: "https://ladakibahin.maharashtra.gov.in",
-    states: ["Maharashtra"],
-    special: []
-  },
-  {
-    id: "ts-rythu-bharosa",
-    name: "Rythu Bharosa (Telangana Farmer Support)",
-    ministry: "Govt of Telangana – Agriculture",
-    type: "State",
-    tag: "Agriculture",
-    benefit: "Investment support of ₹5,000 per acre per season directly to farmers for crop investment",
-    eligibility: "Land-owning farmers in Telangana with cultivable land records (Dharani)",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 18, age_max: 100,
-    occupations: ["Farmer"],
-    documents: ["Aadhaar Card","Pattadar Passbook / Land Records","Bank Account"],
-    how_to_apply: "Credited to eligible farmers via the Agriculture Department; verify at your local MRO office.",
-    link: "https://rythubandhu.telangana.gov.in",
-    states: ["Telangana"],
-    special: []
-  },
-  {
-    id: "ap-aarogyasri",
-    name: "Dr. YSR Aarogyasri (Andhra Pradesh)",
-    ministry: "Govt of Andhra Pradesh – Health",
-    type: "State",
-    tag: "Health",
-    benefit: "Cashless treatment up to ₹25 lakh per year for listed procedures at empanelled hospitals",
-    eligibility: "Andhra Pradesh families with a valid white ration card / income below ₹5 lakh",
-    income_max: "any",
-    categories: ["General","OBC","SC","ST","EWS"],
-    genders: ["Male","Female","Transgender"],
-    age_min: 0, age_max: 100,
-    occupations: ["Daily Wage Worker","Farmer","Self Employed","Homemaker","Unemployed","Senior Citizen"],
-    documents: ["Aadhaar Card","White Ration Card","Aarogyasri Health Card"],
-    how_to_apply: "Approach the Aarogyasri Mitra at an empanelled hospital or PHC with your ration card.",
-    link: "https://www.ysraarogyasri.ap.gov.in",
-    states: ["Andhra Pradesh"],
-    special: []
-  }
-]
+  // Karnataka
+  { id:"ka_gruha_jyothi", name:"Gruha Jyothi (Karnataka)", ministry:"Government of Karnataka", category:"utility", scope:"state", states:["Karnataka"], benefit:"200 units free electricity per month", eligibility:{ categories:["general","obc","sc","st"], occupations:["all"] }, description:"Free electricity up to 200 units per month for domestic consumers in Karnataka.", documents:["Aadhaar Card","Electricity Bill","Ration Card"], applyUrl:"https://gruha.karnataka.gov.in", tags:["electricity","free","karnataka"] },
+  { id:"ka_anna_bhagya", name:"Anna Bhagya (Karnataka)", ministry:"Government of Karnataka", category:"food", scope:"state", states:["Karnataka"], benefit:"10 kg free rice per person per month", eligibility:{ maxIncome:120000, categories:["general","obc","sc","st"] }, description:"Free rice scheme for BPL and APL families in Karnataka.", documents:["Aadhaar Card","Ration Card","BPL Card"], applyUrl:"https://ahara.karnataka.gov.in", tags:["food","rice","free","karnataka"] },
+  { id:"ka_yuva_nidhi", name:"Yuva Nidhi (Karnataka)", ministry:"Government of Karnataka", category:"employment", scope:"state", states:["Karnataka"], benefit:"₹3,000/month graduates, ₹1,500 diploma holders", eligibility:{ minAge:18, maxAge:25, maxIncome:300000, categories:["general","obc","sc","st"], occupations:["unemployed","student"] }, description:"Unemployment allowance for educated youth in Karnataka.", documents:["Aadhaar Card","Degree/Diploma Certificate","Income Certificate","Bank Account"], applyUrl:"https://sevasindhu.karnataka.gov.in", tags:["employment","youth","karnataka"] },
+  { id:"ka_shadi_bhagya", name:"Shadi Bhagya (Karnataka)", ministry:"Government of Karnataka", category:"women", scope:"state", states:["Karnataka"], benefit:"₹50,000 financial assistance for marriage", eligibility:{ minAge:18, maxAge:35, gender:["female"], maxIncome:150000, categories:["sc","st","obc"] }, description:"Financial assistance for marriages of SC/ST/OBC girls in Karnataka.", documents:["Aadhaar Card","Caste Certificate","Income Certificate","Marriage Certificate","Bank Account"], applyUrl:"https://sevasindhu.karnataka.gov.in", tags:["women","marriage","karnataka"] },
+  { id:"ka_aarogya", name:"Aarogya Karnataka", ministry:"Government of Karnataka", category:"health", scope:"state", states:["Karnataka"], benefit:"Free treatment up to ₹5 lakh at government hospitals", eligibility:{ categories:["general","obc","sc","st"], occupations:["all"] }, description:"Universal health coverage for all Karnataka residents at government hospitals.", documents:["Aadhaar Card","Ration Card or Karnataka domicile"], applyUrl:"https://arogya.karnataka.gov.in", tags:["health","free","karnataka"] },
 
-// ── FILTER ENGINE ──────────────────────────────────────────────
+  // Telangana
+  { id:"ts_rythu_bandhu", name:"Rythu Bandhu (Telangana)", ministry:"Government of Telangana", category:"agriculture", scope:"state", states:["Telangana"], benefit:"₹10,000/acre per year", eligibility:{ categories:["general","obc","sc","st"], occupations:["farmer"] }, description:"Investment support scheme providing ₹5,000 per acre per crop season.", documents:["Aadhaar Card","Land Pass Book","Bank Account"], applyUrl:"https://rythubandhu.telangana.gov.in", tags:["farmer","income","telangana"] },
+  { id:"ts_aasara", name:"Aasara Pensions (Telangana)", ministry:"Government of Telangana", category:"pension", scope:"state", states:["Telangana"], benefit:"₹3,016/month pension", eligibility:{ minAge:57, maxIncome:150000, categories:["general","obc","sc","st"] }, description:"Social security pension for elderly, widows, weavers, disabled in Telangana.", documents:["Aadhaar Card","Age/Widow/Disability Proof","Income Certificate","Bank Account"], applyUrl:"https://tsepds.ap.gov.in", tags:["pension","elderly","telangana"] },
+  { id:"ts_kalyana_lakshmi", name:"Kalyana Lakshmi / Shaadi Mubarak (Telangana)", ministry:"Government of Telangana", category:"women", scope:"state", states:["Telangana"], benefit:"₹1,00,116 marriage assistance", eligibility:{ minAge:18, gender:["female"], maxIncome:200000, categories:["sc","st","obc","minority"] }, description:"Financial assistance for marriages of SC/ST girls and minority community girls.", documents:["Aadhaar Card","Caste/Community Certificate","Income Certificate","Marriage Certificate","Bank Account"], applyUrl:"https://telanganaepass.cgg.gov.in", tags:["women","marriage","telangana"] },
+  { id:"ts_kcr_kit", name:"KCR Kit (Telangana)", ministry:"Government of Telangana", category:"women", scope:"state", states:["Telangana"], benefit:"₹13,000 + baby kit for institutional delivery", eligibility:{ gender:["female"], categories:["general","obc","sc","st"] }, description:"Cash incentive and kit for newborns to encourage institutional delivery.", documents:["Aadhaar Card","Delivery Certificate","Bank Account","MCP Card"], applyUrl:"https://hmfw.telangana.gov.in", tags:["women","maternity","telangana"] },
+
+  // Andhra Pradesh
+  { id:"ap_ysr_pension", name:"YSR Pension Kanuka (Andhra Pradesh)", ministry:"Government of Andhra Pradesh", category:"pension", scope:"state", states:["Andhra Pradesh"], benefit:"₹3,000–10,000/month pension", eligibility:{ minAge:50, maxIncome:150000, categories:["general","obc","sc","st"] }, description:"Enhanced social security pensions for elderly, widows, disabled and fishermen.", documents:["Aadhaar Card","Age Proof","Income Certificate","Bank Account"], applyUrl:"https://navasakam.ap.gov.in", tags:["pension","elderly","andhra_pradesh"] },
+  { id:"ap_ammavodi", name:"Jagananna Ammavodi (Andhra Pradesh)", ministry:"Government of Andhra Pradesh", category:"education", scope:"state", states:["Andhra Pradesh"], benefit:"₹15,000/year to mothers sending kids to school", eligibility:{ gender:["female"], maxIncome:200000, categories:["general","obc","sc","st"] }, description:"Annual financial assistance of ₹15,000 to mothers/guardians sending children to schools.", documents:["Aadhaar Card","Child School Enrollment","Income Certificate","Bank Account"], applyUrl:"https://navasakam.ap.gov.in", tags:["education","women","andhra_pradesh"] },
+  { id:"ap_aarogyasri", name:"Dr. YSR Aarogyasri (Andhra Pradesh)", ministry:"Government of Andhra Pradesh", category:"health", scope:"state", states:["Andhra Pradesh"], benefit:"₹5–10 lakh health coverage per family", eligibility:{ maxIncome:500000, categories:["general","obc","sc","st"] }, description:"Health insurance covering 2,446 medical procedures up to ₹10 lakh per family.", documents:["Aadhaar Card","Ration Card","Income Certificate"], applyUrl:"https://aarogyasri.ap.gov.in", tags:["health","insurance","andhra_pradesh"] },
+
+  // Tamil Nadu
+  { id:"tn_moovalur", name:"Moovalur Ramamirtham Ammaiyar Scheme (Tamil Nadu)", ministry:"Government of Tamil Nadu", category:"education", scope:"state", states:["Tamil Nadu"], benefit:"₹1,000/month + free breakfast for college girls", eligibility:{ gender:["female"], maxIncome:200000, categories:["general","obc","sc","st"], occupations:["student"] }, description:"Monthly stipend and free breakfast for girls from government schools joining colleges.", documents:["Aadhaar Card","School Certificate","Income Certificate","College Admission","Bank Account"], applyUrl:"https://tnsche.tn.gov.in", tags:["education","women","tamil_nadu"] },
+
+  // Maharashtra
+  { id:"mh_ladki_bahin", name:"Mukhyamantri Ladki Bahin Yojana (Maharashtra)", ministry:"Government of Maharashtra", category:"women", scope:"state", states:["Maharashtra"], benefit:"₹1,500/month to eligible women", eligibility:{ minAge:21, maxAge:65, gender:["female"], maxIncome:250000, categories:["general","obc","sc","st"] }, description:"Monthly financial assistance of ₹1,500 to women in Maharashtra.", documents:["Aadhaar Card","Income Certificate","Bank Account","Domicile Certificate"], applyUrl:"https://ladakibahin.maharashtra.gov.in", tags:["women","cash","maharashtra"] },
+  { id:"mh_mahatma_phule", name:"Mahatma Phule Jan Arogya (Maharashtra)", ministry:"Government of Maharashtra", category:"health", scope:"state", states:["Maharashtra"], benefit:"₹1.5 lakh–5 lakh health insurance", eligibility:{ maxIncome:100000, categories:["general","obc","sc","st"] }, description:"Cashless treatment for serious ailments at empanelled hospitals in Maharashtra.", documents:["Aadhaar Card","Yellow/Orange Ration Card","Income Certificate"], applyUrl:"https://www.jeevandayee.gov.in", tags:["health","insurance","maharashtra"] },
+
+  // Uttar Pradesh
+  { id:"up_kanya_sumangala", name:"Kanya Sumangala Yojana (UP)", ministry:"Government of Uttar Pradesh", category:"women", scope:"state", states:["Uttar Pradesh"], benefit:"₹15,000 total for girl child in 6 installments", eligibility:{ maxAge:18, gender:["female"], maxIncome:300000, categories:["general","obc","sc","st"] }, description:"Financial support for girl child from birth to graduation in 6 installments.", documents:["Birth Certificate","Aadhaar Card","Income Certificate","Bank Account"], applyUrl:"https://mksy.up.gov.in", tags:["women","girl","education","up"] },
+
+  // Rajasthan
+  { id:"rj_chiranjeevi", name:"Mukhyamantri Chiranjeevi Swasthya Bima (Rajasthan)", ministry:"Government of Rajasthan", category:"health", scope:"state", states:["Rajasthan"], benefit:"₹25 lakh health insurance per family per year", eligibility:{ categories:["general","obc","sc","st"] }, description:"Cashless health insurance of ₹25 lakh covering 1,916 packages for all Rajasthan residents.", documents:["Aadhaar Card","Jan Aadhaar Card"], applyUrl:"https://chiranjeevi.rajasthan.gov.in", tags:["health","insurance","rajasthan"] },
+
+  // West Bengal
+  { id:"wb_lakshmir_bhandar", name:"Lakshmir Bhandar (West Bengal)", ministry:"Government of West Bengal", category:"women", scope:"state", states:["West Bengal"], benefit:"₹500–1,000/month to women heads of household", eligibility:{ minAge:25, maxAge:60, gender:["female"], categories:["general","obc","sc","st"] }, description:"Monthly income support to women heads of households in West Bengal.", documents:["Aadhaar Card","Ration Card","Bank Account","Domicile Certificate"], applyUrl:"https://wb.gov.in", tags:["women","cash","west_bengal"] },
+  { id:"wb_kanyashree", name:"Kanyashree Prakalpa (West Bengal)", ministry:"Government of West Bengal", category:"education", scope:"state", states:["West Bengal"], benefit:"₹1,000/year + ₹25,000 one-time for girls", eligibility:{ minAge:13, maxAge:18, gender:["female"], maxIncome:120000, categories:["general","obc","sc","st"], occupations:["student"] }, description:"Annual scholarship and one-time grant to unmarried girls aged 13-18 to continue education.", documents:["Aadhaar Card","School Certificate","Income Certificate","Bank Account"], applyUrl:"https://wbkanyashree.gov.in", tags:["education","women","west_bengal"] },
+
+  // Delhi
+  { id:"dl_tirth_yatra", name:"Mukhyamantri Tirth Yatra Yojana (Delhi)", ministry:"Government of Delhi", category:"social", scope:"state", states:["Delhi"], benefit:"Free pilgrimage for senior citizens", eligibility:{ minAge:60, categories:["general","obc","sc","st"] }, description:"Free pilgrimage to religious sites across India for senior citizens of Delhi.", documents:["Aadhaar Card","Age Proof","Delhi Domicile"], applyUrl:"https://edistrict.delhigovt.nic.in", tags:["senior","pilgrimage","free","delhi"] },
+];
+
 export function filterSchemes(profile) {
-  const { age, gender, income, category, occupation, state, special = [] } = profile
-  const ageNum = parseInt(age) || 30
-  const incomeNum = parseIncome(income)
-
-  return SCHEMES.filter(s => {
-    // Age check
-    if (ageNum < s.age_min || ageNum > s.age_max) return false
-    // Gender check — scheme must list the user's gender
-    if (s.genders.length && gender && !s.genders.includes(gender)) return false
-    // Category check — schemes open to "General" are open to all categories
-    if (s.categories.length && !s.categories.includes(category) && !s.categories.includes("General")) return false
-    // Occupation check
-    if (s.occupations.length && occupation && !s.occupations.includes(occupation)) return false
-    // Income check
-    if (s.income_max !== "any") {
-      const maxIncome = parseIncome(s.income_max)
-      if (incomeNum > maxIncome) return false
+  const { age=30, gender="all", state="", category="general", occupation="all", income=300000, specialStatus=[] } = profile;
+  return SCHEMES.filter(scheme => {
+    const e = scheme.eligibility;
+    if (e.minAge && age < e.minAge) return false;
+    if (e.maxAge && age > e.maxAge) return false;
+    if (e.gender && e.gender.length > 0 && gender !== "all") { if (!e.gender.includes(gender)) return false; }
+    if (e.categories && e.categories.length > 0) { if (!e.categories.includes(category)) return false; }
+    if (e.maxIncome && income > e.maxIncome) return false;
+    if (e.occupations && !e.occupations.includes("all") && occupation !== "all") { if (!e.occupations.includes(occupation)) return false; }
+    if (scheme.scope === "state" && scheme.states.length > 0) {
+      if (state && !scheme.states.includes(state)) return false;
+      if (!state) return false;
     }
-    // State check — central schemes (states "all" or undefined) match everywhere;
-    // state schemes only match users from that state
-    if (s.states && s.states !== "all" && state && !s.states.includes(state)) return false
-    // Special-status gate — schemes that target a special group (widow,
-    // differently abled, pregnant, ex-serviceman…) only appear if the user
-    // declared at least one matching status in the form
-    if (s.special && s.special.length && !s.special.some(req => special.includes(req))) return false
-    return true
-  })
+    if (e.specialStatus && e.specialStatus.length > 0 && !e.specialStatus.includes("none")) {
+      if (!specialStatus || specialStatus.length === 0) return false;
+      const hasMatch = e.specialStatus.some(s => specialStatus.includes(s));
+      if (!hasMatch) return false;
+    }
+    return true;
+  });
 }
 
-function parseIncome(income) {
-  if (!income || income === "any") return Infinity
-  const map = {
-    "Below ₹1 Lakh": 100000,
-    "₹1–3 Lakh": 300000,
-    "₹3–6 Lakh": 600000,
-    "₹6–10 Lakh": 1000000,
-    "Above ₹10 Lakh": 9999999,
-    "1lakh": 100000,
-    "2.5lakh": 250000,
-    "3lakh": 300000,
-    "6lakh": 600000,
-    "18lakh": 1800000
-  }
-  return map[income] || Infinity
-}
+export const SCHEME_STATES = ["Andhra Pradesh","Delhi","Karnataka","Maharashtra","Rajasthan","Tamil Nadu","Telangana","Uttar Pradesh","West Bengal"];
+
+export const SCHEME_CATEGORIES = [
+  { value:"all", label:"All Categories" },
+  { value:"health", label:"🏥 Health" },
+  { value:"housing", label:"🏠 Housing" },
+  { value:"agriculture", label:"🌾 Agriculture" },
+  { value:"education", label:"📚 Education" },
+  { value:"women", label:"👩 Women & Child" },
+  { value:"pension", label:"👴 Pension" },
+  { value:"employment", label:"💼 Employment" },
+  { value:"business", label:"🏪 Business" },
+  { value:"disability", label:"♿ Disability" },
+  { value:"minority", label:"🌙 Minority" },
+  { value:"food", label:"🍚 Food" },
+  { value:"utility", label:"💡 Utility" },
+  { value:"social", label:"🤝 Social" },
+  { value:"insurance", label:"🛡️ Insurance" },
+];
