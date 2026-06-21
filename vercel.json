@@ -4,7 +4,11 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!api/|google|sitemap|manifest|sw\\.js|icons/|og-image|favicon).*)",
+      "source": "/google2f9abffe6ce43652.html",
+      "destination": "/google2f9abffe6ce43652.html"
+    },
+    {
+      "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
     }
   ],
