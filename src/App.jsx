@@ -123,13 +123,13 @@ function Spinner({ T }) {
 }
 
 function shareOnWhatsApp(scheme){
-  const msg=`🌉 *Adhikar Setu*\n\n*${scheme.name}*\n💰 ${scheme.benefit}\n🔗 ${scheme.applyUrl}\n\n_Find your schemes: adhikarsetu-eta.vercel.app_`;
+  const msg=`🌉 *Adhikar Setu*\n\n*${scheme.name}*\n💰 ${scheme.benefit}\n🔗 ${scheme.applyUrl}\n\n_Find your schemes: adhikarasetu.vercel.app_`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
 }
 
 function shareAllResults(schemes){
   const lines=schemes.slice(0,8).map((s,i)=>`${i+1}. *${s.name}*\n   💰 ${s.benefit}`).join("\n\n");
-  const msg=`🌉 *Adhikar Setu — My Eligible Schemes*\n\n${lines}\n\n_Find your schemes: adhikarsetu-eta.vercel.app_`;
+  const msg=`🌉 *Adhikar Setu — My Eligible Schemes*\n\n${lines}\n\n_Find your schemes: adhikarasetu.vercel.app_`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
   trackEvent("share_all",{ count:schemes.length });
 }
@@ -619,7 +619,7 @@ export default function App(){
       {typeof document!=="undefined"&&!document.getElementById("plausible-script")&&(()=>{
         const s=document.createElement("script");
         s.id="plausible-script"; s.defer=true;
-        s.setAttribute("data-domain","adhikarsetu-eta.vercel.app");
+        s.setAttribute("data-domain","adhikarasetu.vercel.app");
         s.src="https://plausible.io/js/script.js";
         document.head.appendChild(s);
         return null;
