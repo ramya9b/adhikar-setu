@@ -94,6 +94,79 @@ function Badge({ text,color }){
   return <span style={{fontSize:10,fontWeight:700,padding:"2px 7px",borderRadius:10,background:color+"22",color,border:`1px solid ${color}44`,whiteSpace:"nowrap"}}>{text}</span>;
 }
 
+// ─── Markdown Renderer ───────────────────────────────────────
+function MarkdownMessage({ text, T }) {
+  const lines = text.split("\n");
+  const elements = [];
+  let i = 0;
+
+  const parseInline = (str) => {
+    // Bold **text**
+    const parts = str.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((p, idx) => {
+      if (p.startsWith('**') && p.endsWith('**')) {
+        return <strong key={idx} style={{fontWeight:700}}>{p.slice(2,-2)}</strong>;
+      }
+      // Links [text](url)
+      const linkParts = p.split(/(\[[^\]]+\]\([^)]+\))/g);
+      return linkParts.map((lp, lidx) => {
+        const linkMatch = lp.match(/\[([^\]]+)\]\(([^)]+)\)/);
+        if (linkMatch) {
+          return <a key={lidx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer"
+            style={{color:"#138808",textDecoration:"underline",wordBreak:"break-all"}}>{linkMatch[1]}</a>;
+        }
+        return lp;
+      });
+    });
+  };
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Empty line
+    if (!line.trim()) { elements.push(<div key={i} style={{height:8}}/>); i++; continue; }
+
+    // Heading ## or ###
+    if (line.startsWith('### ')) {
+      elements.push(<div key={i} style={{fontWeight:700,fontSize:14,color:T.text,marginTop:10,marginBottom:4}}>{parseInline(line.slice(4))}</div>);
+      i++; continue;
+    }
+    if (line.startsWith('## ')) {
+      elements.push(<div key={i} style={{fontWeight:800,fontSize:15,color:"#000080",marginTop:12,marginBottom:4}}>{parseInline(line.slice(3))}</div>);
+      i++; continue;
+    }
+    if (line.startsWith('# ')) {
+      elements.push(<div key={i} style={{fontWeight:800,fontSize:16,color:"#000080",marginTop:12,marginBottom:6}}>{parseInline(line.slice(2))}</div>);
+      i++; continue;
+    }
+
+    // Bullet points * or - or numbered 1.
+    if (line.match(/^[\*\-]\s/) || line.match(/^\d+\.\s/)) {
+      const listItems = [];
+      while (i < lines.length && (lines[i].match(/^[\*\-]\s/) || lines[i].match(/^\d+\.\s/) || lines[i].startsWith('    '))) {
+        const item = lines[i].replace(/^[\*\-]\s/, '').replace(/^\d+\.\s/, '').replace(/^    /, '');
+        if (item.trim()) {
+          listItems.push(
+            <div key={i} style={{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}}>
+              <span style={{color:"#FF9933",flexShrink:0,marginTop:2}}>•</span>
+              <span style={{flex:1,lineHeight:1.5}}>{parseInline(item)}</span>
+            </div>
+          );
+        }
+        i++;
+      }
+      elements.push(<div key={`list-${i}`} style={{marginTop:4,marginBottom:4}}>{listItems}</div>);
+      continue;
+    }
+
+    // Regular paragraph
+    elements.push(<div key={i} style={{marginBottom:4,lineHeight:1.6}}>{parseInline(line)}</div>);
+    i++;
+  }
+
+  return <div style={{fontSize:14,color:T.text}}>{elements}</div>;
+}
+
 // ─── Back To Top Button ───────────────────────────────────────
 function BackToTop({ T }) {
   const [visible,setVisible] = useState(false);
@@ -478,7 +551,12 @@ function ChatPage({ T,lang }){
         {messages.map((m,i)=>(
           <div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start",marginBottom:10}}>
             {m.role!=="user"&&<div style={{width:28,height:28,borderRadius:"50%",background:`linear-gradient(135deg,${FLAG.saffron},${FLAG.green})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,marginRight:8,flexShrink:0,marginTop:2}}>🌉</div>}
-            <div style={{maxWidth:"80%",background:m.role==="user"?FLAG.saffron+"dd":T.card,color:m.role==="user"?"#fff":T.text,borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",padding:"10px 14px",fontSize:14,lineHeight:1.5,border:m.role!=="user"?`1px solid ${T.border}`:"none",whiteSpace:"pre-wrap"}}>{m.content}</div>
+            <div style={{maxWidth:"80%",background:m.role==="user"?FLAG.saffron+"dd":T.card,borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",padding:"10px 14px",border:m.role!=="user"?`1px solid ${T.border}`:"none"}}>
+              {m.role==="user"
+                ?<span style={{fontSize:14,color:"#fff",lineHeight:1.5}}>{m.content}</span>
+                :<MarkdownMessage text={m.content} T={T}/>
+              }
+            </div>
           </div>
         ))}
         {loading&&<div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}><div style={{width:28,height:28,borderRadius:"50%",background:`linear-gradient(135deg,${FLAG.saffron},${FLAG.green})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>🌉</div><div style={{background:T.card,border:`1px solid ${T.border}`,borderRadius:"14px 14px 14px 4px",padding:"10px 16px"}}><span style={{color:T.text2,fontSize:13}}>{t(lang,"chatSearching")}</span></div></div>}
